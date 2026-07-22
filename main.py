@@ -56,7 +56,7 @@ def correcUnitPriceColumn(df):
 
 def correctQuantityColumn(df):
 
-    df["quantity"] = df["quantity"].fillna(1)
+    df["quantity"] = df["quantity"].fillna(1).astype(int)
 
     print("Quantity column corrected successfully.")
 
