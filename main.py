@@ -68,7 +68,7 @@ def correctQuantityColumn(df):
 def convertOrderDateColumn(df):
     df["order_date"] = pd.to_datetime(
         df["order_date"], format="mixed", dayfirst=True, errors="coerce"
-    ).dt.strftime("%d/%m/%Y")
+    )
 
     print("Order date column corrected successfully.")
 
