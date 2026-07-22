@@ -1,5 +1,5 @@
 order_id,order_date,customer_name,city,product,quantity,unit_price,payment_mode
-ORD0081,2026-03-04,Priya,Mumbai,Headphones,,Rs.2038,Cash
+ORD0081,2026-03-04,Priya, mumBaI ,Headphones,,Rs.2038,Cash
 ORD0005,12/02/2026,Sneha,Chennai,Keyboard,3,1121,Card
 ORD0180,04/02/2026,Vikram,Bengaluru,headphones,1,2284,NetBanking
 ORD0108,18/06/2026,Divya,Chennai,Keyboard,2,1135,Card

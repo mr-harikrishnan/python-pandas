@@ -25,8 +25,7 @@ def removeDuplicatesAndGetCount(df):
 
 def correctityNames(df):
 
-    df["city"] = df["city"].str.lstrip().str.title()
-
+    df["city"] = df["city"].astype(str).str.strip().str.capitalize()
     print("City names cleaned successfully.")
 
     return df
