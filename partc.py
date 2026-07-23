@@ -87,7 +87,7 @@ def dataClean(df):
         df["order_date"], format="mixed", dayfirst=True, errors="coerce"
     )
 
-    df.to_csv('sales_data_clean.csv', index=False)
+    df.to_csv('sales_data_clean_part_c.csv', index=False)
 
     print("Data cleaned successfully.")
 
