@@ -46,6 +46,7 @@ def findProblemsInOrdersCustomerId(ordersDf):
 
     print(rowsWithNullCustomerId)
 
+# Check if customers.customer_id values are unique
 
 def checkCustomerIdIsUnique(customersDf):
 
