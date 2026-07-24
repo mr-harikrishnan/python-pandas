@@ -21,6 +21,8 @@ def getCountOfRowsAndColumns(customersDf,ordersDf):
     print("\nOrder Data Types:\n")
     print(ordersDf.dtypes)
 
+    return
+
 
 # Look closely at raw values in orders.customer_id.List all problems found in that key column.
 
@@ -46,6 +48,8 @@ def findProblemsInOrdersCustomerId(ordersDf):
 
     print(rowsWithNullCustomerId)
 
+    return
+
 # Check if customers.customer_id values are unique
 
 def checkCustomerIdIsUnique(customersDf):
@@ -55,6 +59,8 @@ def checkCustomerIdIsUnique(customersDf):
     print("\nDuplicate customer_id values found:\n")
 
     print(repeatedCustomerIds)
+
+    return
 
 
 
