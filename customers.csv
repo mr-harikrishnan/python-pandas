@@ -1,5 +1,5 @@
 customer_id,customer_name,city,signup_date,segment
-CUST001,Anitha Sharma,Mumbai,2025-11-02,Regular
+CUST001,Anitha Sharma,Mumbai,2025-11-02,regular
 CUST002,Rahul Nair,Delhi,2025-01-17,Regular
 CUST003,Priya Raj,Mumbai,2025-07-03,Regular
 CUST004,Kavya Pillai,Chennai,2025-10-04,Regular
