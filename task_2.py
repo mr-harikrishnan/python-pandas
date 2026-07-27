@@ -141,7 +141,7 @@ def mergeOrderWithCustomer(ordersDf, customersDf):
 
     # We chose a left join because we need all order records to generate an accurate revenue report.
 
-    return
+   
 
 
 # Use indicator=True in your merge. How many orders failed to match a customer?
@@ -157,6 +157,8 @@ def unmatchedOrders(mergedDf):
     df = df["order_id"]
 
     print("Count of orders failed to match a customer : \n", len(df))
+
+    print("\n Successfully generated the unmatched orders report.\n")
 
     print("\nList of order_ids :")
 
@@ -181,7 +183,6 @@ def check_many_to_one_merge(ordersDf, customersDf):
         customersDf.duplicated(subset="customer_id", keep=False)
     ]["customer_id"]
 
-    print("dublicateCustomer...", dublicateCustomer)
 
     dublicateCustomerIdx = customersDf[
         customersDf.duplicated(subset="customer_id", keep=False)
@@ -196,6 +197,8 @@ def check_many_to_one_merge(ordersDf, customersDf):
     ordersDf = ordersDf.drop(dublicateCustomerInOrdersIdx)
 
     merged = ordersDf.merge(customersDf, validate="many_to_one")
+
+    print("\nMany-to-one merge validated successfully.\n")
 
     print(merged)
 
