@@ -7,11 +7,11 @@ import pandas as pd
 
 def getCountOfRowsAndColumns(customersDf, ordersDf):
 
-    countOfCustomerRows = len(customersDf)
-    countOfCustomerColumns = len(customersDf.columns)
+    countOfCustomerRows = customersDf.shape[0]
+    countOfCustomerColumns = customersDf.shape[1]
 
-    countOfOrderRows = len(ordersDf)
-    countOfOrderColumns = len(ordersDf.columns)
+    countOfOrderRows = ordersDf.shape[0]
+    countOfOrderColumns = ordersDf.shape[1]
 
     print("\nCount rows, check columns, and see data types for each file.\n")
     print(
