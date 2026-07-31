@@ -385,7 +385,7 @@ def main():
 
     # PART-D
 
-    totalRevenueInMergedDataframe = addTotalRevenueColumn(mergedDf)
+    addTotalRevenueColumn(mergedDf)
 
     totalRevenueBycity(mergedDf)
 
