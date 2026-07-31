@@ -92,6 +92,8 @@ def ordersDataClean(ordersDf):
 
     ordersDf["order_id"] = ordersDf["order_id"].str.strip().str.upper()
 
+    ordersDf["customer_id"] = ordersDf["customer_id"].str.strip().str.upper()
+
     ordersDf["order_date"] = ordersDf["order_date"] = pd.to_datetime(
         ordersDf["order_date"], format="mixed", dayfirst=True, errors="coerce"
     )
@@ -126,6 +128,20 @@ def customersDataClean(customersDf):
 def mergeOrderWithCustomer(ordersDf, customersDf):
 
     merged = ordersDf.merge(customersDf, how="left", indicator=True)
+
+    # Highest order number
+
+    maxOrderNo = merged["order_id"].str.replace("ORD", "", regex=False).astype(int).max()
+
+    newOrderNo = maxOrderNo + 1
+
+    # Duplicate order_id rows
+    duplicateMask = merged["order_id"].duplicated(keep="first")
+
+    # Change only second (and later) duplicate rows
+    for idx in merged[duplicateMask].index:
+     merged.loc[idx, "order_id"] = f"ORD{newOrderNo:04d}"
+     newOrderNo += 1
 
     print("Orders merged with customers successfully.")
 
@@ -221,7 +237,7 @@ def processUnattributedRevenue(df):
 # Total revenue by customer city (from the customers table, not any other city column).
 
 
-def addTotalRevenue(mergedDf):
+def addTotalRevenueColumn(mergedDf):
 
     mergedDf["total_amount"] = mergedDf["quantity"] * mergedDf["unit_price"]
 
@@ -230,6 +246,9 @@ def addTotalRevenue(mergedDf):
     print(mergedDf)
 
     return mergedDf
+
+
+# Total revenue by customer city
 
 
 def totalRevenueBycity(mergedDf):
@@ -318,19 +337,19 @@ def verifyRevenueConservation(ordersDf, mergedDf):
 def verifySanityChecks(mergedDf):
 
     assert (
-            (mergedDf["quantity"] >= 0).all()
-            and (mergedDf["unit_price"] >= 0).all()
-            and (mergedDf["total_amount"] >= 0).all()
-        ), "Found negative quantity, price, or revenue."
-    
+        (mergedDf["quantity"] >= 0).all()
+        and (mergedDf["unit_price"] >= 0).all()
+        and (mergedDf["total_amount"] >= 0).all()
+    ), "Found negative quantity, price, or revenue."
+
     assert (
-            mergedDf["total_amount"].notna().all()
-        ), "Some orders have missing total_amount."
-    
+        mergedDf["total_amount"].notna().all()
+    ), "Some orders have missing total_amount."
+
     assert (
-            mergedDf.loc[mergedDf["_merge"] == "both", "order_date"]
-            >= mergedDf.loc[mergedDf["_merge"] == "both", "signup_date"]
-        ).all(), "Found orders placed before customer signup."
+        mergedDf.loc[mergedDf["_merge"] == "both", "order_date"]
+        >= mergedDf.loc[mergedDf["_merge"] == "both", "signup_date"]
+    ).all(), "Found orders placed before customer signup."
 
     print("V3 Passed - verified Sanity Checks")
 
@@ -355,6 +374,9 @@ def main():
 
     mergedDf = mergeOrderWithCustomer(ordersDf, customersDf)
 
+    mergedDf.to_csv("merged_data.csv", index=False)
+
+
     # unmatchedOrders(mergedDf)
 
     # check_many_to_one_merge(ordersDf, customersDf)
@@ -363,7 +385,7 @@ def main():
 
     # PART-D
 
-    totalRevenueInMergedDataframe = addTotalRevenue(mergedDf)
+    totalRevenueInMergedDataframe = addTotalRevenueColumn(mergedDf)
 
     totalRevenueBycity(mergedDf)
 
