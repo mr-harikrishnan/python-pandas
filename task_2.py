@@ -302,11 +302,9 @@ def verifyRevenueConservation(ordersDf, mergedDf):
 
     originalRevenue = (ordersDf["quantity"] * ordersDf["unit_price"]).sum()
 
-    matchedRevenue = mergedDf.loc[mergedDf["_merge"] == "both", "total_amount"].sum()
+    matchedRevenue = (mergedDf[mergedDf["_merge"] == "both"]["total_amount"]).sum()
 
-    unmatchedRevenue = mergedDf.loc[
-        mergedDf["_merge"] == "left_only", "total_amount"
-    ].sum()
+    unmatchedRevenue = (mergedDf[mergedDf["_merge"] == "left_only"]["total_amount"]).sum()
 
     assert (
         originalRevenue == matchedRevenue + unmatchedRevenue
