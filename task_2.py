@@ -103,23 +103,19 @@ def ordersDataClean(ordersDf):
 
 def customersDataClean(customersDf):
 
-    customersDf["customer_id"]=customersDf["customer_id"].str.strip().str.upper()
+    customersDf["customer_id"] = customersDf["customer_id"].str.strip().str.upper()
 
-    customersDf["customer_name"]=customersDf["customer_name"].str.strip().str.title()
+    customersDf["customer_name"] = customersDf["customer_name"].str.strip().str.title()
 
-    customersDf["city"]=customersDf["city"].str.strip().str.title()
+    customersDf["city"] = customersDf["city"].str.strip().str.title()
 
-    customersDf["segment"]=customersDf["segment"].str.strip().str.capitalize()
-    
+    customersDf["segment"] = customersDf["segment"].str.strip().str.capitalize()
+
     customersDf["signup_date"] = customersDf["signup_date"] = pd.to_datetime(
-            customersDf["signup_date"], format="mixed", dayfirst=True, errors="coerce"
-        )
+        customersDf["signup_date"], format="mixed", dayfirst=True, errors="coerce"
+    )
 
     return customersDf
-    
-
-    
-    
 
 
 # Merge orders with customers.
@@ -140,8 +136,6 @@ def mergeOrderWithCustomer(ordersDf, customersDf):
     # Reason
 
     # We chose a left join because we need all order records to generate an accurate revenue report.
-
-   
 
 
 # Use indicator=True in your merge. How many orders failed to match a customer?
@@ -183,7 +177,6 @@ def check_many_to_one_merge(ordersDf, customersDf):
         customersDf.duplicated(subset="customer_id", keep=False)
     ]["customer_id"]
 
-
     dublicateCustomerIdx = customersDf[
         customersDf.duplicated(subset="customer_id", keep=False)
     ]["customer_id"].index
@@ -217,10 +210,131 @@ def processUnattributedRevenue(df):
     df["order_id"] = df["order_id"].fillna("Unattributed")
     return df
 
+
 # reason:
 # "If we received the money, I will calculate it in the total revenue. "
-# "But I will label it as 'Unattributed' so we don't lose track of it. 
+# "But I will label it as 'Unattributed' so we don't lose track of it.
 # This way, the financial total is correct, and I can look into the mismatched data later to fix it.
+
+# PART-D
+
+# Total revenue by customer city (from the customers table, not any other city column).
+
+
+def addTotalRevenue(mergedDf):
+
+    mergedDf["total_amount"] = mergedDf["quantity"] * mergedDf["unit_price"]
+
+    print("Total amount column added successfully.")
+
+    print(mergedDf)
+
+    return mergedDf
+
+
+def totalRevenueBycity(mergedDf):
+
+    revenueByCity = mergedDf.groupby("city")["total_amount"].sum()
+
+    print("\nTotal Revenue by Customer City:\n")
+
+    print(revenueByCity)
+
+    return
+
+
+def mostSpentCustomer(mergedDf):
+
+    index = mergedDf["total_amount"].idxmax()
+    cost = mergedDf["total_amount"].max()
+
+    highAmountCustomer = mergedDf.loc[index, "customer_name"]
+
+    print("\nName : ", highAmountCustomer, " Cost : ", cost)
+
+    print(" ")
+
+    return
+
+
+# Total revenue by segment (Regular vs Premium).
+
+
+def totalRevenueBySegment(mergedDf):
+
+    print(mergedDf.groupby("segment")["total_amount"].sum())
+
+    print(" ")
+
+    return
+
+
+# Which customers have never placed an order? (Think: which merge direction answers this?)
+
+
+def customersNeverPlacedOrder(ordersDf, customersDf):
+
+    mergedDf = customersDf.merge(ordersDf, how="left", indicator=True)
+
+    noOrders = mergedDf[mergedDf["_merge"] == "left_only"]
+
+    print(noOrders[["customer_id", "customer_name", "city"]])
+
+
+ # PART-E
+
+    # Every assignment from now on ends with a verification section: 3 checks, written as code, proving your own output is correct.
+    # For this assignment the three checks are:
+
+ # V1 — Row conservation: prove your merge did not create or destroy orders (150 in → how many out? assert it).
+
+def verifyRowConservation(ordersDf, mergedDf):
+
+    assert len(ordersDf) == len(mergedDf), "Merge changed the number of orders."
+
+    print("V1 Passed - Row conservation verified.")
+
+
+
+ # V2 — Revenue conservation: total revenue of all orders must equal matched revenue + unmatched revenue, exactly. Assert it.
+
+def verifyRevenueConservation(ordersDf, mergedDf):
+
+    originalRevenue = (ordersDf["quantity"] * ordersDf["unit_price"]).sum()
+
+    matchedRevenue = mergedDf.loc[mergedDf["_merge"] == "both", "total_amount"].sum()
+
+    unmatchedRevenue = mergedDf.loc[
+        mergedDf["_merge"] == "left_only", "total_amount"
+    ].sum()
+
+    assert (
+        originalRevenue == matchedRevenue + unmatchedRevenue
+    ), "Revenue is not conserved."
+
+    print("V2 Passed - Revenue conservation verified.")
+
+
+# V3 — Sanity check of your own choosing: invent one more check and explain what failure it would catch.
+
+def verifySanityChecks(mergedDf):
+
+    assert (
+            (mergedDf["quantity"] >= 0).all()
+            and (mergedDf["unit_price"] >= 0).all()
+            and (mergedDf["total_amount"] >= 0).all()
+        ), "Found negative quantity, price, or revenue."
+    
+    assert (
+            mergedDf["total_amount"].notna().all()
+        ), "Some orders have missing total_amount."
+    
+    assert (
+            mergedDf.loc[mergedDf["_merge"] == "both", "order_date"]
+            >= mergedDf.loc[mergedDf["_merge"] == "both", "signup_date"]
+        ).all(), "Found orders placed before customer signup."
+
+    print("V3 Passed - verified Sanity Checks")
 
 
 def main():
@@ -233,21 +347,49 @@ def main():
 
     customersDf = customersDataClean(customersDf)
 
-    getCountOfRowsAndColumns(customersDf, ordersDf)
+    # getCountOfRowsAndColumns(customersDf, ordersDf)
 
-    findProblemsInOrdersCustomerId(ordersDf)
+    # findProblemsInOrdersCustomerId(ordersDf)
 
-    checkCustomerIdIsUnique(customersDf)
+    # checkCustomerIdIsUnique(customersDf)
 
     # PART-B
 
     mergedDf = mergeOrderWithCustomer(ordersDf, customersDf)
 
-    unmatchedOrders(mergedDf)
+    # unmatchedOrders(mergedDf)
 
-    check_many_to_one_merge(ordersDf, customersDf)
+    # check_many_to_one_merge(ordersDf, customersDf)
 
-    processUnattributedRevenue(ordersDf)
+    # processUnattributedRevenue(ordersDf)
+
+    # PART-D
+
+    totalRevenueInMergedDataframe = addTotalRevenue(mergedDf)
+
+    totalRevenueBycity(mergedDf)
+
+    mostSpentCustomer(mergedDf)
+
+    totalRevenueBySegment(mergedDf)
+
+    customersNeverPlacedOrder(ordersDf, customersDf)
+
+    # PART-E
+
+    verifyRowConservation(ordersDf, mergedDf)
+
+    verifyRevenueConservation(ordersDf, mergedDf)
+
+    verifySanityChecks(mergedDf)
+
+   
+
+   
+
+
+
+    
 
 
 if __name__ == "__main__":
