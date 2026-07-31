@@ -131,7 +131,9 @@ def mergeOrderWithCustomer(ordersDf, customersDf):
 
     # Highest order number
 
-    maxOrderNo = merged["order_id"].str.replace("ORD", "", regex=False).astype(int).max()
+    maxOrderNo = (
+        merged["order_id"].str.replace("ORD", "", regex=False).astype(int).max()
+    )
 
     newOrderNo = maxOrderNo + 1
 
@@ -140,8 +142,8 @@ def mergeOrderWithCustomer(ordersDf, customersDf):
 
     # Change only second (and later) duplicate rows
     for idx in merged[duplicateMask].index:
-     merged.loc[idx, "order_id"] = f"ORD{newOrderNo:04d}"
-     newOrderNo += 1
+        merged.loc[idx, "order_id"] = f"ORD{newOrderNo:04d}"
+        newOrderNo += 1
 
     print("Orders merged with customers successfully.")
 
@@ -245,6 +247,8 @@ def addTotalRevenueColumn(mergedDf):
 
     print(mergedDf)
 
+    mergedDf.to_csv("merged_data_with_toal_revenue.csv", index=False)
+
     return mergedDf
 
 
@@ -255,6 +259,15 @@ def totalRevenueBycity(mergedDf):
 
     revenueByCity = mergedDf.groupby("city")["total_amount"].sum()
 
+    print("total_value :")
+
+    print("chennai : ", mergedDf[mergedDf["city"] == "Chennai"]["total_amount"].sum())
+
+    print(
+        "Coimbatore : ",
+        mergedDf[mergedDf["city"] == "Coimbatore"]["total_amount"].sum(),
+    )
+
     print("\nTotal Revenue by Customer City:\n")
 
     print(revenueByCity)
@@ -264,13 +277,14 @@ def totalRevenueBycity(mergedDf):
 
 def mostSpentCustomer(mergedDf):
 
-    index = mergedDf["total_amount"].idxmax()
-    cost = mergedDf["total_amount"].max()
+    grouped = mergedDf.groupby("customer_id")["total_amount"].sum()
 
-    highAmountCustomer = mergedDf.loc[index, "customer_name"]
+    highAmountCustomer = grouped.idxmax()
+    cost = grouped.max()
 
-    print("\nName : ", highAmountCustomer, " Cost : ", cost)
+    print(mergedDf[mergedDf["customer_id"] == highAmountCustomer]["total_amount"])
 
+    print("\nCustomerId : ", highAmountCustomer, " Cost : ", cost)
     print(" ")
 
     return
@@ -300,12 +314,13 @@ def customersNeverPlacedOrder(ordersDf, customersDf):
     print(noOrders[["customer_id", "customer_name", "city"]])
 
 
- # PART-E
+# PART-E
 
-    # Every assignment from now on ends with a verification section: 3 checks, written as code, proving your own output is correct.
-    # For this assignment the three checks are:
+# Every assignment from now on ends with a verification section: 3 checks, written as code, proving your own output is correct.
+# For this assignment the three checks are:
 
- # V1 — Row conservation: prove your merge did not create or destroy orders (150 in → how many out? assert it).
+# V1 — Row conservation: prove your merge did not create or destroy orders (150 in → how many out? assert it).
+
 
 def verifyRowConservation(ordersDf, mergedDf):
 
@@ -314,8 +329,8 @@ def verifyRowConservation(ordersDf, mergedDf):
     print("V1 Passed - Row conservation verified.")
 
 
+# V2 — Revenue conservation: total revenue of all orders must equal matched revenue + unmatched revenue, exactly. Assert it.
 
- # V2 — Revenue conservation: total revenue of all orders must equal matched revenue + unmatched revenue, exactly. Assert it.
 
 def verifyRevenueConservation(ordersDf, mergedDf):
 
@@ -323,7 +338,9 @@ def verifyRevenueConservation(ordersDf, mergedDf):
 
     matchedRevenue = (mergedDf[mergedDf["_merge"] == "both"]["total_amount"]).sum()
 
-    unmatchedRevenue = (mergedDf[mergedDf["_merge"] == "left_only"]["total_amount"]).sum()
+    unmatchedRevenue = (
+        mergedDf[mergedDf["_merge"] == "left_only"]["total_amount"]
+    ).sum()
 
     assert (
         originalRevenue == matchedRevenue + unmatchedRevenue
@@ -333,6 +350,7 @@ def verifyRevenueConservation(ordersDf, mergedDf):
 
 
 # V3 — Sanity check of your own choosing: invent one more check and explain what failure it would catch.
+
 
 def verifySanityChecks(mergedDf):
 
@@ -374,9 +392,6 @@ def main():
 
     mergedDf = mergeOrderWithCustomer(ordersDf, customersDf)
 
-    mergedDf.to_csv("merged_data.csv", index=False)
-
-
     # unmatchedOrders(mergedDf)
 
     # check_many_to_one_merge(ordersDf, customersDf)
@@ -402,14 +417,6 @@ def main():
     verifyRevenueConservation(ordersDf, mergedDf)
 
     verifySanityChecks(mergedDf)
-
-   
-
-   
-
-
-
-    
 
 
 if __name__ == "__main__":
