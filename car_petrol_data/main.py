@@ -111,6 +111,15 @@ def main():
 
 ## Part 2 — Required charts
 
+
+# **Chart 1 — Monthly fuel spend (bar chart).**
+
+
+# One bar per month, value labels on top of each bar 
+# (use a loop with `ax.text()` or `ax.annotate()`, not `bar_label` alone). 
+# Highlight the highest-spend month in a different color and annotate *why* it might be high 
+# (look at the individual fills in that month before you guess).
+
  monthlyFuelSpendChart(df)
 
  
