@@ -16,6 +16,72 @@ def dateFomatChange(df):
  df["date"] = pd.to_datetime(df["date"],format="mixed",dayfirst=True)
 
  return df
+
+
+
+def monthlyFuelSpendChart(df):
+
+ df["month"] = df["date"].dt.strftime("%b %y")
+
+ monthlySpend = df.groupby("month",sort=False)["price_inr"].sum()
+
+ highestMonth = monthlySpend.idxmax()
+ highestSpend = monthlySpend.max()
+
+
+ barColors=[]
+
+
+ for months in monthlySpend.index:
+
+  if months == highestMonth:
+   barColors.append("tomato")
+  else:
+   barColors.append("skyblue")
+
+
+
+ fig, ax = plt.subplots(figsize=(12,6))
+
+
+ bars = ax.bar(monthlySpend.index,monthlySpend.values,color=barColors)
+
+
+ for bar in bars:
+
+  height = bar.get_height()
+
+  ax.text(
+            bar.get_x() + bar.get_width()/2,
+            height + 100,
+            f"₹{height:,.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
+
+ monthData = df[df["month"] == highestMonth]
+
+ refillCount = len(monthData)
+ 
+ highestIndex = monthlySpend.index.get_loc(highestMonth)
+
+ ax.annotate(
+        f"Highest spend\n{refillCount} refills this month",
+        xy=(highestIndex, highestSpend-100),
+        xytext=(highestIndex + 1.5, highestSpend + 1200),
+        arrowprops=dict(arrowstyle="->", color="black"),
+        fontsize=10,
+        bbox=dict(boxstyle="round", fc="white", ec="black")
+    )
+
+ ax.set_xlabel("Month")
+
+ ax.grid(True,alpha=0.2)
+
+ ax.set_ylabel("Fuel Spend (INR)")
+
+ plt.show()
  
 
 def main():
@@ -44,6 +110,8 @@ def main():
 
 
 ## Part 2 — Required charts
+
+ monthlyFuelSpendChart(df)
 
  
 
