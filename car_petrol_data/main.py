@@ -86,9 +86,13 @@ def monthlyFuelSpendChart(df):
 
 def odometerChart(df):
 
- odometerData = df[df["odometer_km"].notna()].copy()
+ odometerData = df.copy()
 
- print(odometerData)
+ odometerData = odometerData.set_index("date")
+
+ odometerData["odometer_km"] = odometerData["odometer_km"].interpolate(method="time",limit_area="inside")
+
+ odometerData = odometerData.reset_index()
 
  fig , ax = plt.subplots(figsize=(12,6))
 
@@ -100,7 +104,8 @@ def odometerChart(df):
 
   y = odometerData.iloc[i]["odometer_km"]
 
-  ax.text(x,y+150,f"{int(y):,}",ha="center",fontsize=8,)
+  if pd.notna(y):
+   ax.text(x,y+150,f"{int(y):,}",ha="center",fontsize=8,)
 
  ax.set_title("Car odometer reading over time")
 
@@ -109,15 +114,10 @@ def odometerChart(df):
 
  ax.grid(True, alpha=0.3)
 
- plt.xticks(rotation=45)
+ plt.xticks(rotation=25)
 
 
- plt.show()
-
- print(df)
-
- print(odometerData)
- 
+ plt.show() 
  
 
 def main():
@@ -156,7 +156,7 @@ def main():
 # Highlight the highest-spend month in a different color and annotate *why* it might be high 
 # (look at the individual fills in that month before you guess).
 
-#  monthlyFuelSpendChart(df)
+ monthlyFuelSpendChart(df)
 
 #  **Chart 2 — Odometer over time (line chart).**
 
