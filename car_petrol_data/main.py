@@ -82,11 +82,47 @@ def monthlyFuelSpendChart(df):
  ax.set_ylabel("Fuel Spend (INR)")
 
  plt.show()
+
+
+def odometerChart(df):
+
+ odometerData = df[df["odometer_km"].notna()].copy()
+
+ print(odometerData)
+
+ fig , ax = plt.subplots(figsize=(12,6))
+
+ ax.plot(odometerData["date"],odometerData["odometer_km"],marker="o",color="royalblue",linewidth=2)
+
+ for i in range(len(odometerData)):
+
+  x = odometerData.iloc[i]["date"]
+
+  y = odometerData.iloc[i]["odometer_km"]
+
+  ax.text(x,y+150,f"{int(y):,}",ha="center",fontsize=8,)
+
+ ax.set_title("Car odometer reading over time")
+
+ ax.set_xlabel("date")
+ ax.set_ylabel("Odometer (km)")
+
+ ax.grid(True, alpha=0.3)
+
+ plt.xticks(rotation=45)
+
+
+ plt.show()
+
+ print(df)
+
+ print(odometerData)
+ 
  
 
 def main():
 
- ## Part 1 — Load and prepare
+ ## Part 1 — Load and prepare------------------------------------
 
 
  
@@ -109,7 +145,7 @@ def main():
 
 
 
-## Part 2 — Required charts
+## Part 2 — Required charts --------------------------------------
 
 
 # **Chart 1 — Monthly fuel spend (bar chart).**
@@ -120,7 +156,15 @@ def main():
 # Highlight the highest-spend month in a different color and annotate *why* it might be high 
 # (look at the individual fills in that month before you guess).
 
- monthlyFuelSpendChart(df)
+#  monthlyFuelSpendChart(df)
+
+#  **Chart 2 — Odometer over time (line chart).**
+
+# Plot the odometer reading against date. 
+# Your chart must honestly handle the fact that the first 10 refills have **no odometer reading** — 
+# decide how to show or exclude that period and defend it in a `# WHY:` comment.
+
+ odometerChart(df)
 
  
 
