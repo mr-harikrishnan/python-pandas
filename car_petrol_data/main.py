@@ -20,9 +20,10 @@ def dataClean(df):
     serviceRows = df["price_inr"].isna()
 
     df["odometer_km"] = df["odometer_km"].interpolate(
-        method="time",
-        limit_area="inside"
+        method="time", limit_area="inside"
     )
+
+    df["odometer_km"] = df["odometer_km"].round()
 
     df.loc[serviceRows, "odometer_km"] = pd.NA
 
@@ -133,9 +134,88 @@ def odometerChart(df):
     plt.show()
 
 
+def drivingIntensityChart(df):
+
+    drivingData = df.copy()
+
+    drivingData = drivingData.dropna(subset=["odometer_km"])
+
+    drivingData["kmDriven"] = drivingData["odometer_km"].diff()
+
+    drivingData["dayCount"] = drivingData["date"].diff().dt.days
+
+    drivingData["kmPerDay"] = (
+        drivingData["kmDriven"] / drivingData["dayCount"]
+    ).round()
+
+    drivingData = drivingData.dropna(subset=["kmPerDay"])
+
+    print(len(drivingData))
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(
+        drivingData["date"],
+        drivingData["kmPerDay"],
+        marker="o",
+        color="cyan",
+        linewidth=2,
+    )
+
+    for i in range(len(drivingData)):
+
+        x = drivingData.iloc[i]["date"]
+
+        y = drivingData.iloc[i]["kmPerDay"]
+
+        ax.text(
+            x,
+            y + 1,
+            f"{y:.1f}",
+            ha="center",
+            fontsize=8,
+        )
+
+
+    highestIndex = drivingData["kmPerDay"].idxmax()
+
+    highestData = drivingData.loc[highestIndex]
+
+    ax.annotate(
+        "Highest km/day",
+        xy=(highestData["date"], highestData["kmPerDay"]),
+        xytext=(highestData["date"], highestData["kmPerDay"] + 10),
+        arrowprops=dict(arrowstyle="->"),
+        bbox=dict(boxstyle="round", fc="white"),
+    )
+
+    lowestIndex = drivingData["kmPerDay"].idxmin()
+
+    lowestData = drivingData.loc[lowestIndex]
+    ax.annotate(
+        "Lowest km/day",
+        xy=(lowestData["date"], lowestData["kmPerDay"]),
+        xytext=(lowestData["date"], lowestData["kmPerDay"] + 10),
+        arrowprops=dict(arrowstyle="->"),
+        bbox=dict(boxstyle="round", fc="white"),
+    )
+
+    ax.set_title("Driving intensity (km per day between refills)")
+
+    ax.set_xlabel("Date")
+
+    ax.set_ylabel("Distance (km/day)")
+
+    ax.grid(True, alpha=0.3)
+
+    plt.xticks(rotation=25)
+
+    plt.show()
+
+
 def main():
 
-    ## Part 1 — Load and prepare------------------------------------
+    ## Part 1 — Load and prepare-----------------------------------------------------------------------------------
 
     # 1. Load the CSV. Parse `date` into a proper datetime column.
     # Note the dates are in mixed text formats ("June 1 2025", "Sept 5 2025", "March 1 2026") — handle this in code,
@@ -154,7 +234,12 @@ def main():
 
     # completed task 2 and 3 data-quality-issue.md
 
-    ## Part 2 — Required charts --------------------------------------
+
+
+
+
+
+    ## Part 2 — Required charts --------------------------------------------------------------------------------------
 
     # **Chart 1 — Monthly fuel spend (bar chart).**
 
@@ -172,6 +257,15 @@ def main():
     # decide how to show or exclude that period and defend it in a `# WHY:` comment.
 
     odometerChart(df)
+
+    # **Chart 3 — Driving intensity (km per day between refills).**
+
+    # Compute km driven between consecutive odometer readings,
+    # divide by days elapsed, and plot it over time. At least
+    # **two data points on this chart require an `ax.annotate()` with an arrow** explaining what happened.
+    # Finding *which* two points need explanation is part of the assignment.
+
+    drivingIntensityChart(df)
 
 
 main()
