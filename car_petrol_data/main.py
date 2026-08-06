@@ -315,6 +315,32 @@ def checkMOnthlySpendData(df):
     return monthlySpend
 
 
+def checkKmPerDayIsPlausible(df):
+
+    df = df.copy()
+
+    df = df.dropna(subset=["odometer_km"]).copy()
+
+    df["kmDriven"] = df["odometer_km"].diff()
+
+    df["daysElapsed"] = df["date"].diff().dt.days
+
+    df = df.dropna(subset=["daysElapsed"])
+
+    df["kmPerDay"] = (df["kmDriven"] / df["daysElapsed"])
+
+    averageOneDayKm = 300
+
+    failedRows = df[(df["kmPerDay"] < 0 ) | ( df["kmPerDay"] > averageOneDayKm)]
+
+    if failedRows.empty:
+        print("PASS - All km/day values are physically plausible.")
+    else:
+        print("FAIL - Implausible km/day values found:")
+        print(failedRows)    
+
+
+
 def main():
 
     ## Part 1 — Load and prepare-----------------------------------------------------------------------------------
@@ -330,11 +356,10 @@ def main():
     # 2. Identify every data quality issue you can find and list them in a markdown cell.
     # For each one, state **what you will do about it and why**.
 
-    # 3. Any row you exclude or
+    # Any row you exclude or
     # any value you estimate must be documented with a `# WHY:` comment. A `# WHY:` comment defends a decision — it
     # does not restate the operation.
 
-    # completed task 2 and 3 data-quality-issue.md
 
 
 
@@ -354,7 +379,7 @@ def main():
     # Highlight the highest-spend month in a different color and annotate *why* it might be high
     # (look at the individual fills in that month before you guess).
 
-    monthlyFuelSpendChart(df)
+    # monthlyFuelSpendChart(df)
 
     #  **Chart 2 — Odometer over time (line chart).**
 
@@ -392,12 +417,20 @@ def main():
 
     # - Check that the odometer column is strictly increasing wherever it exists.
 
-    checkOdometerColumnIsIncreasing(df)
+    # checkOdometerColumnIsIncreasing(df)
 
     # - Check that the sum of your monthly spend chart equals the sum of the raw `price_inr` column. 
     # If your chart totals don't match the raw data, your chart is lying.
 
-    checkMOnthlySpendData(df)
+    # checkMOnthlySpendData(df)
+
+    # - Check that every km-per-day value is physically plausible for a personal car, 
+    # and **print any rows that fail**. Then look at the failures and decide: data error, 
+    # or real event? Your answer goes in the story summary.
+
+    checkKmPerDayIsPlausible(df)
+
+
 
 
 main()
