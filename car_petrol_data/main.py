@@ -304,6 +304,17 @@ def checkOdometerColumnIsIncreasing(df):
     return result
 
 
+def checkMOnthlySpendData(df):
+
+    df["month"] = df["date"].dt.strftime("%b %y")
+
+    monthlySpend = df.groupby("month",sort=False)["price_inr"].sum()
+
+    print(monthlySpend)
+
+    return monthlySpend
+
+
 def main():
 
     ## Part 1 — Load and prepare-----------------------------------------------------------------------------------
@@ -343,7 +354,7 @@ def main():
     # Highlight the highest-spend month in a different color and annotate *why* it might be high
     # (look at the individual fills in that month before you guess).
 
-    # monthlyFuelSpendChart(df)
+    monthlyFuelSpendChart(df)
 
     #  **Chart 2 — Odometer over time (line chart).**
 
@@ -382,6 +393,11 @@ def main():
     # - Check that the odometer column is strictly increasing wherever it exists.
 
     checkOdometerColumnIsIncreasing(df)
+
+    # - Check that the sum of your monthly spend chart equals the sum of the raw `price_inr` column. 
+    # If your chart totals don't match the raw data, your chart is lying.
+
+    checkMOnthlySpendData(df)
 
 
 main()
