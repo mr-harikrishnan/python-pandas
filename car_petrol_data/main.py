@@ -337,7 +337,30 @@ def checkKmPerDayIsPlausible(df):
         print("PASS - All km/day values are physically plausible.")
     else:
         print("FAIL - Implausible km/day values found:")
-        print(failedRows)    
+        print(failedRows)   
+
+
+def checkFuelEfficiency(df):
+
+    df = df.copy()
+
+    df = df.dropna(subset=["odometer_km","litres"]).copy()
+
+    df["kmDriven"] = df["odometer_km"].diff()
+
+    df = df.dropna(subset=["kmDriven"])
+
+    df["kmPerLitter"] = ( df["kmDriven"] / df["litres"]).round().astype(int)
+
+    averageMilagePetrolCar = 25
+
+    failedRows = df[(df["kmPerLitter"] < 0) | (df["kmPerLitter"] > averageMilagePetrolCar)]
+
+    if failedRows.empty:
+        print("PASS - All fuel efficiency values are plausible.")
+    else:
+        print("FAIL - Impossible fuel efficiency values found:")
+        print(failedRows)
 
 
 
@@ -428,7 +451,13 @@ def main():
     # and **print any rows that fail**. Then look at the failures and decide: data error, 
     # or real event? Your answer goes in the story summary.
 
-    checkKmPerDayIsPlausible(df)
+    # checkKmPerDayIsPlausible(df)
+
+    # - If you compute fuel efficiency (km/l) anywhere, 
+    # check that every value falls in a plausible range for a petrol car. 
+    # If any value is impossible, do not delete it silently — explain what caused it.
+
+    checkFuelEfficiency(df)
 
 
 
