@@ -402,7 +402,7 @@ def main():
     # Highlight the highest-spend month in a different color and annotate *why* it might be high
     # (look at the individual fills in that month before you guess).
 
-    # monthlyFuelSpendChart(df)
+    monthlyFuelSpendChart(df)
 
     #  **Chart 2 — Odometer over time (line chart).**
 
@@ -410,7 +410,7 @@ def main():
     # Your chart must honestly handle the fact that the first 10 refills have **no odometer reading** —
     # decide how to show or exclude that period and defend it in a `# WHY:` comment.
 
-    # odometerChart(df)
+    odometerChart(df)
 
     # **Chart 3 — Driving intensity (km per day between refills).**
 
@@ -419,14 +419,14 @@ def main():
     # **two data points on this chart require an `ax.annotate()` with an arrow** explaining what happened.
     # Finding *which* two points need explanation is part of the assignment.
 
-    # drivingIntensityChart(df)
+    drivingIntensityChart(df)
 
     #  **Chart 4 — Your story chart (free choice).**
     # One chart that combines at least two quantities (for example spend vs distance, or cost per km over time)
     # and makes a single clear point. This is the chart you would show the car owner first.
     # A twin-axis chart (`ax.twinx()`) is acceptable if you can defend it.
 
-    # monthlyDistanceVsFuelSpendChart(df)
+    monthlyDistanceVsFuelSpendChart(df)
 
 
 
@@ -457,7 +457,7 @@ def main():
     # check that every value falls in a plausible range for a petrol car. 
     # If any value is impossible, do not delete it silently — explain what caused it.
 
-    checkFuelEfficiency(df)
+    # checkFuelEfficiency(df)
 
 
 
