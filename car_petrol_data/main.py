@@ -176,7 +176,6 @@ def drivingIntensityChart(df):
             fontsize=8,
         )
 
-
     highestIndex = drivingData["kmPerDay"].idxmax()
 
     highestData = drivingData.loc[highestIndex]
@@ -213,6 +212,84 @@ def drivingIntensityChart(df):
     plt.show()
 
 
+def monthlyDistanceVsFuelSpendChart(df):
+
+    df = df.copy()
+
+    df["month"] = df["date"].dt.strftime("%b %y")
+
+    monthlySpend = df.groupby("month", sort=False)["price_inr"].sum()
+
+    df = df.dropna(subset=["odometer_km"]).copy()
+
+    df["kmDriven"] = df["odometer_km"].diff()
+
+    df = df.dropna(subset=["kmDriven"])
+
+    monthlyDrivenKm = df.groupby("month", sort=False)["kmDriven"].sum()
+
+    monthlyDrivenKm = monthlyDrivenKm.reindex(monthlySpend.index)
+
+    chartData = pd.DataFrame({"Fuel_Spend": monthlySpend, "Distance": monthlyDrivenKm}).dropna()
+
+    chartData = chartData.reindex(monthlySpend.index).dropna()
+
+    fig , ax1 = plt.subplots(figsize=(12,6))
+
+    bars = ax1.bar(
+        chartData.index,
+        chartData["Fuel_Spend"],
+        color="skyblue",
+        alpha=0.3,
+        edgecolor="black",
+        linewidth=0.2
+    )
+
+    for bar in bars:
+        height = bar.get_height()
+
+        ax1.text(
+            bar.get_x()+bar.get_width()/2,
+            height+100,
+            f"{height:,.0f}",
+            ha="center",
+            fontsize=8
+        )
+
+    ax1.set_xlabel("Month")
+    ax1.set_ylabel("Fuel Spend (₹) BAR_CHARt")
+    ax1.grid(True, alpha=0.3)
+
+    ax2 = ax1.twinx()
+
+    ax2.plot(
+        chartData.index,
+        chartData["Distance"],
+        marker="o",
+        color="grey",
+        linewidth=2
+    )
+
+    for i in range(len(chartData)):
+        x = chartData.index[i]
+        y=chartData["Distance"].iloc[i]
+
+        ax2.text(
+            x,
+            y-50,
+            f"{y:,.0f}",
+            ha="center",
+            fontsize=8
+        )
+
+    ax2.set_ylabel("Distance Driven (km) LINE CHART")
+
+    ax1.set_title("Monthly fuel spend vs Monthly distance driven")
+
+    plt.xticks(rotation=25)
+
+    plt.show()
+
 def main():
 
     ## Part 1 — Load and prepare-----------------------------------------------------------------------------------
@@ -234,11 +311,6 @@ def main():
 
     # completed task 2 and 3 data-quality-issue.md
 
-
-
-
-
-
     ## Part 2 — Required charts --------------------------------------------------------------------------------------
 
     # **Chart 1 — Monthly fuel spend (bar chart).**
@@ -248,7 +320,7 @@ def main():
     # Highlight the highest-spend month in a different color and annotate *why* it might be high
     # (look at the individual fills in that month before you guess).
 
-    monthlyFuelSpendChart(df)
+    # monthlyFuelSpendChart(df)
 
     #  **Chart 2 — Odometer over time (line chart).**
 
@@ -256,7 +328,7 @@ def main():
     # Your chart must honestly handle the fact that the first 10 refills have **no odometer reading** —
     # decide how to show or exclude that period and defend it in a `# WHY:` comment.
 
-    odometerChart(df)
+    # odometerChart(df)
 
     # **Chart 3 — Driving intensity (km per day between refills).**
 
@@ -265,7 +337,14 @@ def main():
     # **two data points on this chart require an `ax.annotate()` with an arrow** explaining what happened.
     # Finding *which* two points need explanation is part of the assignment.
 
-    drivingIntensityChart(df)
+    # drivingIntensityChart(df)
+
+    #  **Chart 4 — Your story chart (free choice).**
+    # One chart that combines at least two quantities (for example spend vs distance, or cost per km over time)
+    # and makes a single clear point. This is the chart you would show the car owner first.
+    # A twin-axis chart (`ax.twinx()`) is acceptable if you can defend it.
+
+    monthlyDistanceVsFuelSpendChart(df)
 
 
 main()
