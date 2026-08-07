@@ -214,7 +214,10 @@ def monthlyDistanceVsFuelSpendChart(df):
 
     df = df.copy()
 
+    df=df.dropna(subset=["odometer_km"])
+
     df["month"] = df["date"].dt.strftime("%b %y")
+
 
     monthlySpend = df.groupby("month", sort=False)["price_inr"].sum()
 
