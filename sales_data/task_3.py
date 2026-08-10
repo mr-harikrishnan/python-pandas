@@ -248,6 +248,33 @@ def cityProductRevenueHeatmap(ordersDf,customerDf):
     plt.show()
 
 
+def orderValueDistribution(ordersDf):
+
+    orderValues = ordersDf["revenue"]
+
+    meanOrderValue = orderValues.mean()
+
+    fig, ax = plt.subplots(figsize=(10,6))
+
+    ax.hist(orderValues, bins=10)
+
+    ax.axvline(
+        meanOrderValue,
+        linestyle="--",
+        label = f"Mean = {meanOrderValue:,.2f}"
+    )
+
+    ax.set_title("Distribution of Order Values")
+    ax.set_xlabel("Order Value")
+    ax.set_ylabel("Number of Orders")
+
+    ax.legend()
+
+    ax.grid(alpha=0.3)
+
+    plt.show()
+
+
 
 
 def main():
@@ -268,12 +295,12 @@ def main():
 
     ordersDf = addRevenueColumn(ordersDf)
 
-    # revenueperMonth(ordersDf)
+    revenueperMonth(ordersDf)
 
     # 2.⁠ ⁠Bar chart: total revenue by product, sorted so the biggest bar is instantly visible.
     # Add one sentence below the chart: what % of total revenue is the top product? (Compute it, don't eyeball it.)
 
-    # totalRevenueByProduct(ordersDf)
+    totalRevenueByProduct(ordersDf)
 
     # 3.⁠ ⁠Two bar charts side by side (plt.subplots(1, 2)): cities ranked by total revenue,
     # and cities ranked by number of orders. Look at both. Write 2–3 sentences: what contradiction do you see,
@@ -294,6 +321,15 @@ def main():
     # answer:
     #The heatmap explains that Delhi has the highest revenue despite having fewer orders because most of its revenue comes 
     # from the high-value Laptop product.
+
+    # 5.⁠ ⁠Histogram: distribution of order values, with a vertical line at the mean (axvline). 
+    # One sentence: is "the average order" a useful number for this business? Why or why not?
+
+    orderValueDistribution(ordersDf)
+
+    #answer:
+    #The average order value is not very useful for this business because a few exceptionally large orders increase the average,
+    #  while most orders have much lower values.
 
 
 main()
