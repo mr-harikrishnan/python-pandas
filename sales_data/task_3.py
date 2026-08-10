@@ -196,6 +196,59 @@ def cityRevenueAndOrders(ordersDf, customerDf):
 
     plt.show()
 
+def cityProductRevenueHeatmap(ordersDf,customerDf):
+
+    mergedData = ordersDf.merge(customerDf)
+
+    revenuePivot = mergedData.pivot_table(
+        index = "city",
+        columns = "product",
+        values = "revenue",
+        aggfunc = "sum",
+        fill_value = 0
+    )
+
+    fig , ax = plt.subplots(figsize=(10,6))
+
+    im = ax.imshow(revenuePivot.values,cmap="Blues")
+
+    ax.set_xticks(range(len(revenuePivot.columns)))
+
+    ax.set_xticklabels(revenuePivot.columns)
+
+    ax.set_yticks(range(len(revenuePivot.index)))
+
+    ax.set_yticklabels(revenuePivot.index)
+
+    threshold = revenuePivot.values.max() / 2
+
+    for i in range(len(revenuePivot.index)):
+        for j in range(len(revenuePivot.columns)):
+            value = revenuePivot.iloc[i,j]
+
+            textColor = "white" if value > threshold else "black"
+
+            ax.text(
+                j,
+                i,
+                f"{int(value):,}",
+                ha="center",
+                va="center",
+                color=textColor
+            )
+
+    fig.colorbar(im, ax=ax)
+
+    ax.set_title("City x Product Revenue")
+
+    ax.set_xlabel("Product")
+
+    ax.set_ylabel("City")
+
+    plt.show()
+
+
+
 
 def main():
 
@@ -227,6 +280,20 @@ def main():
     # and which city would you call "best"?
 
     cityRevenueAndOrders(ordersDf, customerDf)
+
+    # 4.⁠ ⁠Heatmap, built by hand: city × product revenue. 
+    # Steps: pivot_table first, 
+    # then ax.imshow() to draw the grid, 
+    # set_xticks/set_yticks to put category names on the axes, 
+    # a double for loop with ax.text() to write the revenue number inside every cell, and fig.colorbar() for the scale. 
+    # Bonus mark: make cell text white on dark cells and black on light cells. 
+    # One sentence when done: what does this chart explain about the contradiction in drill 3?
+
+    cityProductRevenueHeatmap(ordersDf,customerDf)
+
+    # answer:
+    #The heatmap explains that Delhi has the highest revenue despite having fewer orders because most of its revenue comes 
+    # from the high-value Laptop product.
 
 
 main()
