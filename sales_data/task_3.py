@@ -121,7 +121,6 @@ def totalRevenueByProduct(orderDf):
             fontsize=8,
         )
 
-
     plt.gca().yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
 
     plt.grid(alpha=0.3)
@@ -139,6 +138,61 @@ def totalRevenueByProduct(orderDf):
         ha="center",
         fontsize=10,
     )
+
+    plt.show()
+
+
+def cityRevenueAndOrders(ordersDf, customerDf):
+
+    mergedData = ordersDf.merge(customerDf)
+
+    citesWithRevenue = (
+        mergedData.groupby("city")["revenue"].sum().sort_values(ascending=False)
+    )
+
+    citiesWithOrderCount = (
+        mergedData.groupby("city")["order_id"].nunique().sort_values(ascending=False)
+    )
+    print(citesWithRevenue)
+
+    print(citiesWithOrderCount)
+
+    fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+
+    # citesWithRevenue
+    bars1 = ax[0].bar(citesWithRevenue.index, citesWithRevenue.values)
+
+    ax[0].set_title("Cities Ranked by Total Revenue")
+    ax[0].set_xlabel("City")
+    ax[0].set_ylabel("Total Revenue")
+
+    for bar in bars1:
+        ax[0].text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height(),
+            f"{int(bar.get_height()):,}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+
+    # citiesWithOrderCount
+
+    bars2 = ax[1].bar(citiesWithOrderCount.index, citiesWithOrderCount.values)
+
+    ax[1].set_title("Cities Ranked by Number of Orders")
+    ax[1].set_xlabel("City")
+    ax[1].set_ylabel("Number of Orders")
+
+    for bar in bars2:
+        ax[1].text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height(),
+            f"{int(bar.get_height())}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
 
     plt.show()
 
@@ -166,7 +220,13 @@ def main():
     # 2.⁠ ⁠Bar chart: total revenue by product, sorted so the biggest bar is instantly visible.
     # Add one sentence below the chart: what % of total revenue is the top product? (Compute it, don't eyeball it.)
 
-    totalRevenueByProduct(ordersDf)
+    # totalRevenueByProduct(ordersDf)
+
+    # 3.⁠ ⁠Two bar charts side by side (plt.subplots(1, 2)): cities ranked by total revenue,
+    # and cities ranked by number of orders. Look at both. Write 2–3 sentences: what contradiction do you see,
+    # and which city would you call "best"?
+
+    cityRevenueAndOrders(ordersDf, customerDf)
 
 
 main()
