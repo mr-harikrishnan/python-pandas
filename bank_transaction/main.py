@@ -1,0 +1,116 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def dataclean(df):
+
+    df = df.copy()
+
+    print(df.info())
+
+    df["Date"] = df["Date"].str.strip()
+
+    df["Date"] = pd.to_datetime(df["Date"], format="%m/%d/%Y")
+
+    df["Time"] = df["Time"].str.strip()
+
+    df["Time"] = df["Time"] = pd.to_datetime(df["Time"], format="mixed").dt.time
+
+    df["Transaction Name"] = df["Transaction Name"].str.strip().str.title()
+
+    df["Direction"] = df["Direction"].str.strip().str.title()
+
+    df["Amount"] = df["Amount"].fillna(0)
+
+    df["Debit"] = df["Debit"].fillna(0)
+
+    df["Credit"] = df["Credit"].fillna(0)
+
+    df["Credit"] = df["Credit"].fillna(0)
+
+    df["Sender / Payer"] = df["Sender / Payer"].str.strip().str.title()
+
+    df["Receiver / Payee"] = df["Receiver / Payee"].str.strip().str.title()
+
+    df["Category"] = df["Category"].str.strip().str.title()
+
+    df["Subcategory"] = df["Subcategory"].str.strip().str.title()
+
+    return df
+
+
+def addOpeningBalanceAndClosingColumns(df):
+
+    df = df.sort_values(["Date", "Time"]).copy()
+
+    df["Month"] = df["Date"].dt.month_name()
+
+    months = df["Month"].unique()
+
+    openingBalance = 30000
+
+    df["Opening Balance"] = 0.0
+
+    df["Closing Balance"] = 0.0
+
+    for month in months:
+
+        monthlyData = df[df["Month"] == month]
+
+        totalDebit = monthlyData["Debit"].sum()
+
+        totalCredit = monthlyData["Credit"].sum()
+
+        closingBalance = openingBalance + totalCredit - totalDebit
+
+        firstRowIndex = monthlyData.index[0]
+
+        lastRowIndex = monthlyData.index[-1]
+
+        df.loc[firstRowIndex, "Opening Balance"] = openingBalance
+
+        df.loc[lastRowIndex, "Closing Balance"] = closingBalance
+
+        openingBalance = closingBalance
+
+    return df
+
+
+def  plotExpensesByCategory(df):
+
+    totalAmountByCategory = df.groupby("Category")["Debit"].sum()
+
+    plt.figure(figsize=(10,6))
+
+    plt.bar(totalAmountByCategory.index,totalAmountByCategory.values,color="red",edgecolor="black",linewidth=1.2,alpha=0.6)
+
+    plt.xlabel("Category")
+
+    plt.ylabel("Paid Amount")
+
+    plt.grid(alpha=0.3)
+
+    plt.title("total amount paid per category")
+
+    plt.show()
+
+
+    
+
+
+def main():
+
+    df = pd.read_csv("./transaction_data.csv")
+
+    df = dataclean(df)
+
+    df = addOpeningBalanceAndClosingColumns(df)
+
+    print(df.info())
+
+    # 1 .Category Expenses: Draw a chart showing the total amount paid per category, ranked from highest to lowest.
+
+    plotExpensesByCategory(df)
+
+
+main()
