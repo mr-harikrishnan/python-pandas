@@ -78,7 +78,7 @@ def addOpeningBalanceAndClosingColumns(df):
 
 def  plotExpensesByCategory(df):
 
-    totalAmountByCategory = df.groupby("Category")["Debit"].sum()
+    totalAmountByCategory = df.groupby("Category")["Debit"].sum().sort_values(ascending=False)
 
     plt.figure(figsize=(10,6))
 
@@ -92,6 +92,38 @@ def  plotExpensesByCategory(df):
 
     plt.title("total amount paid per category")
 
+    plt.show()
+
+
+def dailyCashFlow(df):
+    dailyCashFlow = (
+        df.groupby("Date")[["Credit", "Debit"]]
+        .sum()
+        .reset_index()
+    )
+
+    dailyCashFlow["Date"] = dailyCashFlow["Date"].dt.strftime("%d-%m")
+
+    ax = dailyCashFlow.plot(
+        x="Date",
+        y=["Credit","Debit"],
+        kind="bar",
+        figsize=(14, 6),
+        width=0.8
+    )
+
+    plt.xlabel("Date")
+    plt.ylabel("Amount")
+    plt.title("Daily Cash Flow")
+
+    ax.set_xticks(range(0, len(dailyCashFlow), 5))
+    ax.set_xticklabels(
+        dailyCashFlow["Date"].iloc[::5],
+        rotation=45
+    )
+
+    plt.grid(axis="y", alpha=0.3)
+    plt.tight_layout()
     plt.show()
 
 
@@ -110,7 +142,11 @@ def main():
 
     # 1 .Category Expenses: Draw a chart showing the total amount paid per category, ranked from highest to lowest.
 
-    plotExpensesByCategory(df)
+    # plotExpensesByCategory(df)
+
+    # Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
+
+    dailyCashFlow(df)
 
 
 main()
