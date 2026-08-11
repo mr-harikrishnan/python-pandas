@@ -26,7 +26,7 @@ def dataclean(df):
 
     df["Credit"] = df["Credit"].fillna(0)
 
-    df["Credit"] = df["Credit"].fillna(0)
+    df["Debit"] = df["Debit"].fillna(0)
 
     df["Sender / Payer"] = df["Sender / Payer"].str.strip().str.title()
 
@@ -127,7 +127,34 @@ def dailyCashFlow(df):
     plt.show()
 
 
-    
+def countDailyTransaction(df):
+
+    dailyTransactionCount = df.groupby("Date").size().reset_index(name="transaction_count")
+
+    print(dailyTransactionCount)
+
+    plt.figure(figsize=(12,6))
+
+    plt.plot(dailyTransactionCount["Date"],dailyTransactionCount["transaction_count"],linewidth=0.6,color="purple",marker="o")
+ 
+    for x, y in zip(
+        dailyTransactionCount["Date"],
+        dailyTransactionCount["transaction_count"]
+    ):
+        plt.text(
+            x,
+            y+0.5,
+            f"{int(y):,}",
+            ha="center",
+            fontsize=8
+        )
+
+    plt.xlabel("Date")
+    plt.ylabel("Transaction Count")
+
+    plt.title("Daily Transaction Count")
+    plt.grid(alpha=0.3)
+    plt.show()
 
 
 def main():
@@ -138,15 +165,22 @@ def main():
 
     df = addOpeningBalanceAndClosingColumns(df)
 
-    print(df.info())
+    df.to_csv("clean_data_with_balance.csv",index=False)
 
     # 1 .Category Expenses: Draw a chart showing the total amount paid per category, ranked from highest to lowest.
 
     # plotExpensesByCategory(df)
 
+
     # Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
-    dailyCashFlow(df)
+    # dailyCashFlow(df)
+
+
+    # Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
+
+    countDailyTransaction(df)
 
 
 main()
+
