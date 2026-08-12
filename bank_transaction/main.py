@@ -119,7 +119,9 @@ def dailyCashFlow(df):
 
     for container in ax.containers:
 
-        ax.bar_label(container, fmt="%.0f", padding=3, fontsize=8)  # This gets the height of each bar and adds it as a label.
+        ax.bar_label(
+            container, fmt="%.0f", padding=3, fontsize=8
+        )  # This gets the height of each bar and adds it as a label.
 
     ax.set_xticks(range(0, len(dailyCashFlow), 5))
     ax.set_xticklabels(dailyCashFlow["Date"].iloc[::5], rotation=45)
@@ -286,7 +288,9 @@ def monthlyCashFlow(df):
 
     for container in ax.containers:
 
-        ax.bar_label(container, fmt="%.0f", padding=3, fontsize=9) # This gets the height of each bar and adds it as a label.
+        ax.bar_label(
+            container, fmt="%.0f", padding=3, fontsize=9
+        )  # This gets the height of each bar and adds it as a label.
 
     plt.xlabel("Month")
     plt.xlabel("Amount")
@@ -294,6 +298,41 @@ def monthlyCashFlow(df):
 
     plt.grid(axis="y", alpha=0.3)
     plt.tight_layout()
+    plt.show()
+
+
+def weeklyPaidPercentage(df):
+
+    df = df[df["Debit"] > 0].copy()
+
+    df["Day"] = df["Date"].dt.day_name()
+
+    dayOrder = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+
+    weeklyPaidCount = df.groupby("Day").size().reindex(dayOrder).fillna(0)
+
+    print(weeklyPaidCount)
+
+    plt.figure(figsize=(9, 9))
+
+    plt.pie(weeklyPaidCount.values, autopct="%.1f%%", startangle=90,textprops={"color": "white"},wedgeprops={"edgecolor": "white", "linewidth": 2})
+
+    plt.legend(
+        weeklyPaidCount.index, title="Day", loc="upper right"
+    )
+
+    plt.title("Paid Transaction Count by Day of Week", fontsize=16, pad=15)
+
+    plt.tight_layout()
+
     plt.show()
 
 
@@ -313,13 +352,14 @@ def main():
 
     # 2.Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
-    dailyCashFlow(df)
+    # dailyCashFlow(df)
 
     # 3.Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
     # countDailyTransaction(df)
 
-    # 4.Top Payees:Generate a chart showing the highest-paid merchants or users, ranked by total amount paid from highest to lowest.
+    # 4.Top Payees:Generate a chart showing the highest-paid merchants or users, 
+    # ranked by total amount paid from highest to lowest.
 
     # topPayees(df)
 
@@ -329,7 +369,12 @@ def main():
 
     # 6.Monthly Cash Flow:Plot a chart comparing the total amount paid and received for each month.
 
-    monthlyCashFlow(df)
+    # monthlyCashFlow(df)
+
+    # 7.Weekly Paid Transaction Distribution: Create a pie chart showing the percentage of paid 
+    # transaction counts for each day of the week (Monday to Sunday) across the entire dataset.
+
+    weeklyPaidPercentage(df)
 
 
 main()
