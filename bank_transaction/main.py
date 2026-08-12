@@ -84,7 +84,7 @@ def plotExpensesByCategory(df):
 
     plt.figure(figsize=(10, 6))
 
-    plt.bar(
+    bars = plt.bar(
         totalAmountByCategory.index,
         totalAmountByCategory.values,
         color="red",
@@ -98,6 +98,19 @@ def plotExpensesByCategory(df):
     plt.ylabel("Paid Amount")
 
     plt.grid(alpha=0.3)
+
+    for bar in bars:
+
+        y = bar.get_height()
+
+        plt.text(
+            bar.get_x() + bar.get_width() / 2,
+            y,
+            f"{y:,.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
 
     plt.title("total amount paid per category")
 
@@ -247,7 +260,20 @@ def expensesByCategoryAndSubcategory(df):
 
             amount = categoryData[subCategory]
 
-            ax[i].bar(subCategory, amount)
+            bars = ax[i].bar(subCategory, amount)
+
+            for bar in bars:
+
+                y = bar.get_height()
+
+                ax[i].text(
+                    bar.get_x() + bar.get_width() / 2,
+                    y,
+                    f"{y:,.0f}",
+                    ha="center",
+                    va="bottom",
+                    fontsize=8,
+                )
 
         ax[i].set_title(category, fontsize=12, pad=10)
 
