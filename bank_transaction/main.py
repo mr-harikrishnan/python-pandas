@@ -225,7 +225,9 @@ def expensesByCategoryAndSubcategory(df):
         constrained_layout=True,  # each chart auto space adjust
     )
 
-    ax = ax.flatten()  #
+    ax = ax.flatten() # Converts the 2D array of subplot axes into a 1D array, so we can access each chart easily using ax[i].
+
+    print(ax)
 
     for i in range(numberOfCategories):
 
@@ -283,7 +285,7 @@ def main():
 
     # topPayees(df)
 
-    # Subcategory Breakdown: Draw a chart showing the total amount paid for each subcategory, grouped by its main category.
+    # 5.Subcategory Breakdown: Draw a chart showing the total amount paid for each subcategory, grouped by its main category.
 
     expensesByCategoryAndSubcategory(df)
 
