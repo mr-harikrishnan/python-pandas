@@ -144,16 +144,10 @@ def countDailyTransaction(df):
     )
 
     for i in range(len(dailyTransactionCount)):
-     x = dailyTransactionCount["Date"].iloc[i]
-     y = dailyTransactionCount["transaction_count"].iloc[i]
+        x = dailyTransactionCount["Date"].iloc[i]
+        y = dailyTransactionCount["transaction_count"].iloc[i]
 
-     plt.text(
-        x,
-        y + 0.5,
-        f"{int(y):,}",
-        ha="center",
-        fontsize=8
-     )
+        plt.text(x, y + 0.5, f"{int(y):,}", ha="center", fontsize=8)
 
     plt.xlabel("Date")
     plt.ylabel("Transaction Count")
@@ -177,7 +171,12 @@ def topPayees(df):
     plt.figure(figsize=(12, 6))
 
     plt.bar(
-        topPayees.index, topPayees.values, edgecolor="black", linewidth=1.2, alpha=0.6,color="darkorange"
+        topPayees.index,
+        topPayees.values,
+        edgecolor="black",
+        linewidth=1.2,
+        alpha=0.6,
+        color="darkorange",
     )
 
     plt.xlabel("Payee")
@@ -192,19 +191,68 @@ def topPayees(df):
 
     for i in range(len(topPayees)):
 
-     x = topPayees.index[i]
-     y = topPayees.values[i]
+        x = topPayees.index[i]
+        y = topPayees.values[i]
 
-     plt.text(
-        x,
-        y,
-        f"{y:,.0f}",
-        ha="center",
-        va="bottom",
-        fontsize=9
-     )
+        plt.text(x, y, f"{y:,.0f}", ha="center", va="bottom", fontsize=9)
 
     plt.tight_layout()
+
+    plt.show()
+
+
+def expensesByCategoryAndSubcategory(df):
+
+    df = df[df["Amount"] > 0]
+
+    categorySubcategory = df.groupby(["Category", "Subcategory"])["Debit"].sum()
+
+    categories = categorySubcategory.index.get_level_values("Category").unique()
+
+    numberOfCategories = len(categories)
+
+    eachRowColumn = 3
+
+    rowCount = numberOfCategories // eachRowColumn
+
+    if numberOfCategories % eachRowColumn != 0:
+        rowCount = rowCount + 1
+
+    fig, ax = plt.subplots(
+        rowCount,
+        eachRowColumn,
+        figsize=(18, rowCount * 5),
+        constrained_layout=True,  # each chart auto space adjust
+    )
+
+    ax = ax.flatten()  #
+
+    for i in range(numberOfCategories):
+
+        category = categories[i]
+
+        categoryData = categorySubcategory[category]
+
+        for subCategory in categoryData.index:
+
+            amount = categoryData[subCategory]
+
+            ax[i].bar(subCategory, amount)
+
+        ax[i].set_title(category, fontsize=12, pad=10)
+
+        ax[i].set_ylabel("Total Paid")
+
+        ax[i].tick_params(axis="x", rotation=30)
+
+        ax[i].grid(axis="y", alpha=0.3)
+
+    fig.suptitle("Total Expenses by Category and Subcategory", fontsize=16)
+
+    # Hide unused chart spaces
+    for i in range(numberOfCategories, len(ax)):
+
+        ax[i].set_visible(False)
 
     plt.show()
 
@@ -223,17 +271,21 @@ def main():
 
     # plotExpensesByCategory(df)
 
-    # Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
+    # 2.Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
     # dailyCashFlow(df)
 
-    # Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
+    # 3.Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
     # countDailyTransaction(df)
 
-    # Top Payees:Generate a chart showing the highest-paid merchants or users, ranked by total amount paid from highest to lowest.
+    # 4.Top Payees:Generate a chart showing the highest-paid merchants or users, ranked by total amount paid from highest to lowest.
 
-    topPayees(df)
+    # topPayees(df)
+
+    # Subcategory Breakdown: Draw a chart showing the total amount paid for each subcategory, grouped by its main category.
+
+    expensesByCategoryAndSubcategory(df)
 
 
 main()
