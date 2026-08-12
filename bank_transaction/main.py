@@ -301,6 +301,45 @@ def monthlyCashFlow(df):
     plt.show()
 
 
+def weeklyPaidPercentage(df):
+
+    df = df[df["Debit"] > 0].copy()
+
+    df["Day"] = df["Date"].dt.day_name()
+
+    dayOrder = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+
+    weeklyPaidCount = df.groupby("Day").size().reindex(dayOrder).fillna(0)
+
+    print(weeklyPaidCount)
+
+    plt.figure(figsize=(9, 9))
+
+    plt.pie(
+        weeklyPaidCount.values,
+        autopct="%.1f%%",
+        startangle=90,
+        textprops={"color": "white"},
+        wedgeprops={"edgecolor": "white", "linewidth": 2},
+    )
+
+    plt.legend(weeklyPaidCount.index, title="Day", loc="upper right")
+
+    plt.title("Paid Transaction Count by Day of Week", fontsize=16, pad=15)
+
+    plt.tight_layout()
+
+    plt.show()
+
+
 def hourlyAverageSpending(df):
 
     df = df[df["Debit"] > 0].copy()
@@ -339,28 +378,22 @@ def hourlyAverageSpending(df):
 
 def runningBalance(df):
 
-    monthlyBalance = df.groupby("Month", sort=False)[
-        ["Opening Balance", "Closing Balance"]
-    ].max().reset_index()
+    monthlyBalance = (
+        df.groupby("Month", sort=False)[["Opening Balance", "Closing Balance"]]
+        .max()
+        .reset_index()
+    )
 
     fig, ax = plt.subplots(1, 2, figsize=(14, 6))
 
-    ax[0].plot(
-        monthlyBalance["Month"],
-        monthlyBalance["Opening Balance"],
-        marker="o"
-    )
+    ax[0].plot(monthlyBalance["Month"], monthlyBalance["Opening Balance"], marker="o")
 
     ax[0].set_title("Opening Balance")
     ax[0].set_xlabel("Month")
     ax[0].set_ylabel("Balance")
     ax[0].grid(alpha=0.3)
 
-    ax[1].plot(
-        monthlyBalance["Month"],
-        monthlyBalance["Closing Balance"],
-        marker="o"
-    )
+    ax[1].plot(monthlyBalance["Month"], monthlyBalance["Closing Balance"], marker="o")
 
     ax[1].set_title("Closing Balance")
     ax[1].set_xlabel("Month")
@@ -373,19 +406,44 @@ def runningBalance(df):
             i,
             monthlyBalance["Opening Balance"].iloc[i],
             f"{monthlyBalance['Opening Balance'].iloc[i]:.0f}",
-            ha="center"
+            ha="center",
         )
 
         ax[1].text(
             i,
             monthlyBalance["Closing Balance"].iloc[i],
             f"{monthlyBalance['Closing Balance'].iloc[i]:.0f}",
-            ha="center"
+            ha="center",
         )
 
     fig.suptitle("Monthly Running Balance")
 
     plt.tight_layout()
+    plt.show()
+
+
+def monthlyExpensePercentage(df):
+
+    df = df[df["Debit"] > 0].copy()
+
+    monthlyExpenses = df.groupby("Month", sort=False)["Debit"].sum()
+
+    plt.figure(figsize=(9, 9))
+
+    plt.pie(
+        monthlyExpenses.values,
+        autopct="%.1f%%",
+        startangle=90,
+        textprops={"color": "white"},
+        wedgeprops={"edgecolor": "white", "linewidth": 2},
+    )
+
+    plt.legend(monthlyExpenses.index, title="Month", loc="upper right")
+
+    plt.title("Monthly Expense Distribution", fontsize=16, pad=15)
+
+    plt.tight_layout()
+
     plt.show()
 
 
@@ -401,43 +459,48 @@ def main():
 
     # 1 .Category Expenses: Draw a chart showing the total amount paid per category, ranked from highest to lowest.
 
-    # plotExpensesByCategory(df)
+    plotExpensesByCategory(df)
 
     # 2.Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
-    # dailyCashFlow(df)
+    dailyCashFlow(df)
 
     # 3.Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
-    # countDailyTransaction(df)
+    countDailyTransaction(df)
 
     # 4.Top Payees:Generate a chart showing the highest-paid merchants or users,
     # ranked by total amount paid from highest to lowest.
 
-    # topPayees(df)
+    topPayees(df)
 
     # 5.Subcategory Breakdown: Draw a chart showing the total amount paid for each subcategory, grouped by its main category.
 
-    # expensesByCategoryAndSubcategory(df)
+    expensesByCategoryAndSubcategory(df)
 
     # 6.Monthly Cash Flow:Plot a chart comparing the total amount paid and received for each month.
 
-    # monthlyCashFlow(df)
+    monthlyCashFlow(df)
 
     # 7.Weekly Paid Transaction Distribution: Create a pie chart showing the percentage of paid
     # transaction counts for each day of the week (Monday to Sunday) across the entire dataset.
 
-    # weeklyPaidPercentage(df)
+    weeklyPaidPercentage(df)
 
     # 8.Hourly Average Spending: Create a chart showing the average amount paid per
     #  transaction for each one-hour interval from 00:00–01:00 through 23:00–00:00 across the entire dataset.
 
-    # hourlyAverageSpending(df)
+    hourlyAverageSpending(df)
 
-    # 9.Running Balance: Using the existing opening and closing balance values, 
+    # 9.Running Balance: Using the existing opening and closing balance values,
     # create a single figure with two charts showing the monthly opening balance and closing balance for all months.
 
     runningBalance(df)
+
+    # 10. Monthly Expense Distribution: Create a pie chart showing the percentage share
+    #  of the total paid amount contributed by each month.
+
+    monthlyExpensePercentage(df)
 
 
 main()
