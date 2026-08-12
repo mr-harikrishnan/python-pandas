@@ -374,7 +374,7 @@ def main():
     # 7.Weekly Paid Transaction Distribution: Create a pie chart showing the percentage of paid 
     # transaction counts for each day of the week (Monday to Sunday) across the entire dataset.
 
-    weeklyPaidPercentage(df)
+    # weeklyPaidPercentage(df)
 
 
 main()
