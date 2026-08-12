@@ -117,6 +117,10 @@ def dailyCashFlow(df):
     plt.ylabel("Amount")
     plt.title("Daily Cash Flow")
 
+    for container in ax.containers:
+
+        ax.bar_label(container, fmt="%.0f", padding=3, fontsize=8)  # This gets the height of each bar and adds it as a label.
+
     ax.set_xticks(range(0, len(dailyCashFlow), 5))
     ax.set_xticklabels(dailyCashFlow["Date"].iloc[::5], rotation=45)
 
@@ -225,7 +229,9 @@ def expensesByCategoryAndSubcategory(df):
         constrained_layout=True,  # each chart auto space adjust
     )
 
-    ax = ax.flatten() # Converts the 2D array of subplot axes into a 1D array, so we can access each chart easily using ax[i].
+    ax = (
+        ax.flatten()
+    )  # Converts the 2D array of subplot axes into a 1D array, so we can access each chart easily using ax[i].
 
     print(ax)
 
@@ -259,6 +265,38 @@ def expensesByCategoryAndSubcategory(df):
     plt.show()
 
 
+def monthlyCashFlow(df):
+
+    df = df.sort_values("Date")
+
+    df = df[df["Amount"] > 0]
+
+    creditAndDebitByMonthWise = (
+        df.groupby("Month", sort=False)[["Credit", "Debit"]].sum().reset_index()
+    )
+
+    ax = creditAndDebitByMonthWise.plot(
+        x="Month",
+        y=["Credit", "Debit"],
+        kind="bar",
+        figsize=(14, 6),
+        width=0.8,
+        edgecolor="black",
+    )
+
+    for container in ax.containers:
+
+        ax.bar_label(container, fmt="%.0f", padding=3, fontsize=9) # This gets the height of each bar and adds it as a label.
+
+    plt.xlabel("Month")
+    plt.xlabel("Amount")
+    plt.title("Monthly Cash Flow")
+
+    plt.grid(axis="y", alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
 
     df = pd.read_csv("./transaction_data.csv")
@@ -275,7 +313,7 @@ def main():
 
     # 2.Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
-    # dailyCashFlow(df)
+    dailyCashFlow(df)
 
     # 3.Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
@@ -287,7 +325,11 @@ def main():
 
     # 5.Subcategory Breakdown: Draw a chart showing the total amount paid for each subcategory, grouped by its main category.
 
-    expensesByCategoryAndSubcategory(df)
+    # expensesByCategoryAndSubcategory(df)
+
+    # 6.Monthly Cash Flow:Plot a chart comparing the total amount paid and received for each month.
+
+    monthlyCashFlow(df)
 
 
 main()
