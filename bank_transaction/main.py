@@ -151,7 +151,7 @@ def countDailyTransaction(df):
 
     plt.xlabel("Date")
     plt.ylabel("Transaction Count")
-
+    plt.xticks(rotation=25)
     plt.title("Daily Transaction Count")
     plt.grid(alpha=0.3)
     plt.show()
@@ -179,7 +179,7 @@ def main():
 
     # Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
-    countDailyTransaction(df)
+    # countDailyTransaction(df)
 
 
 main()
