@@ -76,13 +76,22 @@ def addOpeningBalanceAndClosingColumns(df):
     return df
 
 
-def  plotExpensesByCategory(df):
+def plotExpensesByCategory(df):
 
-    totalAmountByCategory = df.groupby("Category")["Debit"].sum().sort_values(ascending=False)
+    totalAmountByCategory = (
+        df.groupby("Category")["Debit"].sum().sort_values(ascending=False)
+    )
 
-    plt.figure(figsize=(10,6))
+    plt.figure(figsize=(10, 6))
 
-    plt.bar(totalAmountByCategory.index,totalAmountByCategory.values,color="red",edgecolor="black",linewidth=1.2,alpha=0.6)
+    plt.bar(
+        totalAmountByCategory.index,
+        totalAmountByCategory.values,
+        color="red",
+        edgecolor="black",
+        linewidth=1.2,
+        alpha=0.6,
+    )
 
     plt.xlabel("Category")
 
@@ -96,20 +105,12 @@ def  plotExpensesByCategory(df):
 
 
 def dailyCashFlow(df):
-    dailyCashFlow = (
-        df.groupby("Date")[["Credit", "Debit"]]
-        .sum()
-        .reset_index()
-    )
+    dailyCashFlow = df.groupby("Date")[["Credit", "Debit"]].sum().reset_index()
 
     dailyCashFlow["Date"] = dailyCashFlow["Date"].dt.strftime("%d-%m")
 
     ax = dailyCashFlow.plot(
-        x="Date",
-        y=["Credit","Debit"],
-        kind="bar",
-        figsize=(14, 6),
-        width=0.8
+        x="Date", y=["Credit", "Debit"], kind="bar", figsize=(14, 6), width=0.8
     )
 
     plt.xlabel("Date")
@@ -117,10 +118,7 @@ def dailyCashFlow(df):
     plt.title("Daily Cash Flow")
 
     ax.set_xticks(range(0, len(dailyCashFlow), 5))
-    ax.set_xticklabels(
-        dailyCashFlow["Date"].iloc[::5],
-        rotation=45
-    )
+    ax.set_xticklabels(dailyCashFlow["Date"].iloc[::5], rotation=45)
 
     plt.grid(axis="y", alpha=0.3)
     plt.tight_layout()
@@ -129,31 +127,85 @@ def dailyCashFlow(df):
 
 def countDailyTransaction(df):
 
-    dailyTransactionCount = df.groupby("Date").size().reset_index(name="transaction_count")
+    dailyTransactionCount = (
+        df.groupby("Date").size().reset_index(name="transaction_count")
+    )
 
     print(dailyTransactionCount)
 
-    plt.figure(figsize=(12,6))
+    plt.figure(figsize=(12, 6))
 
-    plt.plot(dailyTransactionCount["Date"],dailyTransactionCount["transaction_count"],linewidth=0.6,color="purple",marker="o")
- 
-    for x, y in zip(
+    plt.plot(
         dailyTransactionCount["Date"],
-        dailyTransactionCount["transaction_count"]
-    ):
-        plt.text(
-            x,
-            y+0.5,
-            f"{int(y):,}",
-            ha="center",
-            fontsize=8
-        )
+        dailyTransactionCount["transaction_count"],
+        linewidth=0.6,
+        color="purple",
+        marker="o",
+    )
+
+    for i in range(len(dailyTransactionCount)):
+     x = dailyTransactionCount["Date"].iloc[i]
+     y = dailyTransactionCount["transaction_count"].iloc[i]
+
+     plt.text(
+        x,
+        y + 0.5,
+        f"{int(y):,}",
+        ha="center",
+        fontsize=8
+     )
 
     plt.xlabel("Date")
     plt.ylabel("Transaction Count")
     plt.xticks(rotation=25)
     plt.title("Daily Transaction Count")
     plt.grid(alpha=0.3)
+    plt.show()
+
+
+def topPayees(df):
+
+    df = df[df["Debit"] > 0]
+
+    topPayees = (
+        df.groupby("Receiver / Payee")["Debit"]
+        .sum()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+
+    plt.figure(figsize=(12, 6))
+
+    plt.bar(
+        topPayees.index, topPayees.values, edgecolor="black", linewidth=1.2, alpha=0.6,color="darkorange"
+    )
+
+    plt.xlabel("Payee")
+
+    plt.ylabel("Total Amount Paid")
+
+    plt.title("Top 10 Payees by Total Amount Paid")
+
+    plt.xticks(rotation=45, ha="right")
+
+    plt.grid(axis="y", alpha=0.3)
+
+    for i in range(len(topPayees)):
+
+     x = topPayees.index[i]
+     y = topPayees.values[i]
+
+     plt.text(
+        x,
+        y,
+        f"{y:,.0f}",
+        ha="center",
+        va="bottom",
+        fontsize=9
+     )
+
+    plt.tight_layout()
+
     plt.show()
 
 
@@ -165,22 +217,23 @@ def main():
 
     df = addOpeningBalanceAndClosingColumns(df)
 
-    df.to_csv("clean_data_with_balance.csv",index=False)
+    df.to_csv("clean_data_with_balance.csv", index=False)
 
     # 1 .Category Expenses: Draw a chart showing the total amount paid per category, ranked from highest to lowest.
 
     # plotExpensesByCategory(df)
 
-
     # Daily Cash Flow: Create a chart displaying the total amount paid and received for each day.
 
     # dailyCashFlow(df)
-
 
     # Daily Transaction Volume:Plot a chart showing the total number of transactions made each day.
 
     # countDailyTransaction(df)
 
+    # Top Payees:Generate a chart showing the highest-paid merchants or users, ranked by total amount paid from highest to lowest.
+
+    topPayees(df)
+
 
 main()
-
