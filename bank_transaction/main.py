@@ -301,35 +301,36 @@ def monthlyCashFlow(df):
     plt.show()
 
 
-def weeklyPaidPercentage(df):
+def hourlyAverageSpending(df):
 
     df = df[df["Debit"] > 0].copy()
 
-    df["Day"] = df["Date"].dt.day_name()
+    df["Hour"] = df["Time"].apply(lambda x: x.hour)
 
-    dayOrder = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-    ]
-
-    weeklyPaidCount = df.groupby("Day").size().reindex(dayOrder).fillna(0)
-
-    print(weeklyPaidCount)
-
-    plt.figure(figsize=(9, 9))
-
-    plt.pie(weeklyPaidCount.values, autopct="%.1f%%", startangle=90,textprops={"color": "white"},wedgeprops={"edgecolor": "white", "linewidth": 2})
-
-    plt.legend(
-        weeklyPaidCount.index, title="Day", loc="upper right"
+    averageSpendingByHour = (
+        df.groupby("Hour")["Debit"].mean().reindex(range(24), fill_value=0)
     )
 
-    plt.title("Paid Transaction Count by Day of Week", fontsize=16, pad=15)
+    plt.figure(figsize=(14, 6))
+
+    plt.bar(range(24), averageSpendingByHour.values, width=1.0, edgecolor="white")
+
+    plt.xlabel("Hour")
+    plt.ylabel("Average Amount Paid")
+
+    plt.title("Hourly Average Spending", fontsize=16, pad=15)
+
+    # Show every hour from 00:00 to 23:00
+    plt.xticks(range(24), [f"{hour:02d}:00" for hour in range(24)], rotation=45)
+
+    plt.grid(axis="y", alpha=0.3)
+
+    for i in range(24):
+
+        x = i
+        y = averageSpendingByHour.values[i]
+
+        plt.text(x, y, f"{y:.0f}", ha="center", va="bottom", fontsize=8)
 
     plt.tight_layout()
 
@@ -358,7 +359,7 @@ def main():
 
     # countDailyTransaction(df)
 
-    # 4.Top Payees:Generate a chart showing the highest-paid merchants or users, 
+    # 4.Top Payees:Generate a chart showing the highest-paid merchants or users,
     # ranked by total amount paid from highest to lowest.
 
     # topPayees(df)
@@ -371,10 +372,15 @@ def main():
 
     # monthlyCashFlow(df)
 
-    # 7.Weekly Paid Transaction Distribution: Create a pie chart showing the percentage of paid 
+    # 7.Weekly Paid Transaction Distribution: Create a pie chart showing the percentage of paid
     # transaction counts for each day of the week (Monday to Sunday) across the entire dataset.
 
     # weeklyPaidPercentage(df)
+
+    # 8.Hourly Average Spending: Create a chart showing the average amount paid per
+    #  transaction for each one-hour interval from 00:00–01:00 through 23:00–00:00 across the entire dataset.
+
+    hourlyAverageSpending(df)
 
 
 main()
