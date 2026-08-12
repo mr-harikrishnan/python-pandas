@@ -337,6 +337,58 @@ def hourlyAverageSpending(df):
     plt.show()
 
 
+def runningBalance(df):
+
+    monthlyBalance = df.groupby("Month", sort=False)[
+        ["Opening Balance", "Closing Balance"]
+    ].max().reset_index()
+
+    fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+
+    ax[0].plot(
+        monthlyBalance["Month"],
+        monthlyBalance["Opening Balance"],
+        marker="o"
+    )
+
+    ax[0].set_title("Opening Balance")
+    ax[0].set_xlabel("Month")
+    ax[0].set_ylabel("Balance")
+    ax[0].grid(alpha=0.3)
+
+    ax[1].plot(
+        monthlyBalance["Month"],
+        monthlyBalance["Closing Balance"],
+        marker="o"
+    )
+
+    ax[1].set_title("Closing Balance")
+    ax[1].set_xlabel("Month")
+    ax[1].set_ylabel("Balance")
+    ax[1].grid(alpha=0.3)
+
+    for i in range(len(monthlyBalance)):
+
+        ax[0].text(
+            i,
+            monthlyBalance["Opening Balance"].iloc[i],
+            f"{monthlyBalance['Opening Balance'].iloc[i]:.0f}",
+            ha="center"
+        )
+
+        ax[1].text(
+            i,
+            monthlyBalance["Closing Balance"].iloc[i],
+            f"{monthlyBalance['Closing Balance'].iloc[i]:.0f}",
+            ha="center"
+        )
+
+    fig.suptitle("Monthly Running Balance")
+
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
 
     df = pd.read_csv("./transaction_data.csv")
@@ -380,7 +432,12 @@ def main():
     # 8.Hourly Average Spending: Create a chart showing the average amount paid per
     #  transaction for each one-hour interval from 00:00–01:00 through 23:00–00:00 across the entire dataset.
 
-    hourlyAverageSpending(df)
+    # hourlyAverageSpending(df)
+
+    # 9.Running Balance: Using the existing opening and closing balance values, 
+    # create a single figure with two charts showing the monthly opening balance and closing balance for all months.
+
+    runningBalance(df)
 
 
 main()
