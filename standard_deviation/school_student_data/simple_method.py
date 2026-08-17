@@ -14,7 +14,10 @@ def main():
 
     standardDeviation = np.std(df["height"])
 
-    xValues = np.arange(-3, 4) * standardDeviation + mean
+    # xValues = np.arange(-3, 4) * standardDeviation + mean
+    xValues = np.linspace(
+        mean - 4 * standardDeviation, mean + 4 * standardDeviation, 300
+    )
 
     yValues = norm.pdf(xValues, loc=mean, scale=standardDeviation)
 
@@ -25,19 +28,17 @@ def main():
     plt.figure(figsize=(10, 6))
 
     plt.plot(
-        plotDataFrame["X"],
-        plotDataFrame["Y"],
-        marker="o",
-        linewidth=2,
-        markersize=6
+        plotDataFrame["X"], plotDataFrame["Y"], linewidth=2, markersize=6
     )
 
     plt.axvline(mean, linestyle="--", linewidth=2)
 
-    for i in range(len(plotDataFrame)):
-        plt.text(
-            plotDataFrame["X"][i], plotDataFrame["Y"][i], f"{plotDataFrame['Y'][i]:.10f}"
-        )
+    # for i in range(len(plotDataFrame)):
+    #     plt.text(
+    #         plotDataFrame["X"][i],
+    #         plotDataFrame["Y"][i],
+    #         f"{plotDataFrame['Y'][i]:.10f}",
+    #     )
 
     plt.xlabel("Height (X Values)")
     plt.ylabel("Density (Y Values)")
