@@ -6,13 +6,13 @@ from scipy.stats import norm
 
 def main():
 
-    iceCreamShopData = [4800,5200,5500,5700,5900,6000,6200,6400,6700,7000]
+    youtubeVeiwsCount = [1200,1500,1800,2100,2400]
 
-    df = pd.DataFrame({"sale_data": iceCreamShopData})
+    df = pd.DataFrame({"veiws": youtubeVeiwsCount})
 
-    mean = np.mean(df["sale_data"])
+    mean = np.mean(df["veiws"])
 
-    standardDeviation = np.std(df["sale_data"])
+    standardDeviation = np.std(df["veiws"])
 
     xValues = np.arange(-3, 4) * standardDeviation + mean
 
@@ -39,7 +39,7 @@ def main():
             plotDataFrame["X"][i], plotDataFrame["Y"][i], f"{plotDataFrame['Y'][i]:.10f}"
         )
 
-    plt.xlabel("Ice cream Sales (X Values)")
+    plt.xlabel("Veiws (X Values)")
     plt.ylabel("Density (Y Values)")
 
     plt.title("Standard Deviation")
