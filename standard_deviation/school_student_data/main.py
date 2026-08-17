@@ -94,7 +94,7 @@ def main():
 
     for i in range(len(plotDataFrame)):
         plt.text(
-            plotDataFrame["X"][i], plotDataFrame["Y"][i], f"{plotDataFrame['X'][i]}"
+            plotDataFrame["X"][i], plotDataFrame["Y"][i], f"{plotDataFrame['Y'][i]:.10f}"
         )
 
     plt.xlabel("Height (X Values)")
