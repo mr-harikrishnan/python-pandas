@@ -241,6 +241,108 @@ def merge_CEMB_141E_141C(merged_CEMB_141E, cleaned_141C):
     return merged_CEMB_141E_and_141C
 
 
+def clean_141A(df):
+
+    write_report("")
+    write_report("==================================================")
+    write_report("141A CLEANING")
+    write_report("==================================================")
+
+    write_report(f"Before cleaning : {df.shape}")
+
+    df["DateTime_S1"] = pd.to_datetime(df["DateTime_S1"], errors="coerce")
+
+    df = df.sort_values(by=["Unique_ID_S1", "DateTime_S1"], ascending=[True, False])
+
+    df = df.drop_duplicates(subset="Unique_ID_S1", keep="first").reset_index(drop=True)
+
+    write_report(f"After cleaning  : {df.shape}")
+
+    df.to_csv("./cleaned_csvs/141A_cleaned.csv", index=False)
+
+    print(f"141A cleaned data : {df.shape}")
+
+    return df
+
+
+def merge_CEMB_141E_141C_141A(merged_CEMB_141E_141C, cleaned_141A):
+
+    # ---------------LEFT-MERGE-CEMB-141E-141C-141A---------------
+
+    write_report("")
+    write_report("==================================================")
+    write_report("LEFT MERGE - CEMB + 141E + 141C AND 141A")
+    write_report("==================================================")
+
+    left_merged_df = pd.merge(
+        merged_CEMB_141E_141C,
+        cleaned_141A,
+        left_on="Unique_ID_S3",
+        right_on="Unique_ID_S1",
+        how="left",
+    )
+
+    write_report(
+        f"Left merged CEMB + 141E + 141C and 141A : " f"{left_merged_df.shape}"
+    )
+
+    missing_141A_df = left_merged_df[left_merged_df["Unique_ID_S1"].isna()]
+
+    write_report(
+        f"CEMB + 141E + 141C records not found in 141A : " f"{len(missing_141A_df)}"
+    )
+
+    write_report("First 10 missing Unique_ID_S3 values:")
+
+    for unique_id in missing_141A_df["Unique_ID_S3"].head(10):
+        write_report(str(unique_id))
+
+    # ---------------RIGHT-MERGE-CEMB-141E-141C-141A---------------
+
+    write_report("")
+    write_report("==================================================")
+    write_report("RIGHT MERGE - CEMB + 141E + 141C AND 141A")
+    write_report("==================================================")
+
+    right_merged_df = pd.merge(
+        merged_CEMB_141E_141C,
+        cleaned_141A,
+        left_on="Unique_ID_S3",
+        right_on="Unique_ID_S1",
+        how="right",
+    )
+
+    missing_previous_df = right_merged_df[right_merged_df["Unique_ID_S3"].isna()]
+
+    write_report(
+        f"141A records not found in CEMB + 141E + 141C : " f"{len(missing_previous_df)}"
+    )
+
+    write_report("First 10 missing Unique_ID_S1 values:")
+
+    for unique_id in missing_previous_df["Unique_ID_S1"].head(10):
+        write_report(str(unique_id))
+
+    # ---------------INNER-MERGE-CEMB-141E-141C-141A---------------
+
+    write_report("")
+    write_report("==================================================")
+    write_report("INNER MERGE - CEMB + 141E + 141C AND 141A")
+    write_report("==================================================")
+
+    merged_df = pd.merge(
+        merged_CEMB_141E_141C,
+        cleaned_141A,
+        left_on="Unique_ID_S3",
+        right_on="Unique_ID_S1",
+        how="inner",
+    )
+
+    write_report(f"Inner merged CEMB + 141E + 141C + 141A : " f"{merged_df.shape}")
+
+    return merged_df
+
+
 def main():
 
     # Clear old report
@@ -279,6 +381,22 @@ def main():
     # --------------------MERGE-(MERGED-CEMB-141E)-141C--
 
     merged_CEMB_141E_141C = merge_CEMB_141E_141C(merged_CEMB_141E_df, cleaned_141C_df)
+
+    # ------------------------------------------------------
+
+    print(
+        oneFourOneA_df[oneFourOneA_df.duplicated(subset=["Unique_ID_S1"], keep=False)][
+            "Unique_ID_S1"
+        ]
+    )
+
+    # -----------------------CLEAN-141A----------------------
+
+    cleaned_141A_df = clean_141A(oneFourOneA_df)
+
+    # ------------------------MERGE-(MERGED-CEMB-141E-141C)-141A---
+
+    merged_CEMB_141E_141C_141A = merge_CEMB_141E_141C_141A(merged_CEMB_141E_141C,cleaned_141A_df)
 
 
 main()
