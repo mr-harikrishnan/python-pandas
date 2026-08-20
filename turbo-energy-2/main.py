@@ -124,6 +124,8 @@ def merge_CEMB_141E(cleaned_CEMB, cleaned_141E):
 
     write_report(f"Inner merged data : " f"{merged_df.shape}")
 
+    merged_df.to_csv("./merged_csvs/merged_CEMB_141.csv", index=False)
+
     return merged_df
 
 
@@ -220,7 +222,7 @@ def merge_CEMB_141E_141C(merged_CEMB_141E, cleaned_141C):
     write_report("INNER MERGE - CEMB + 141E AND 141C")
     write_report("==================================================")
 
-    merged_df = pd.merge(
+    merged_CEMB_141E_and_141C = pd.merge(
         merged_CEMB_141E,
         cleaned_141C,
         left_on="LGNR",
@@ -228,9 +230,15 @@ def merge_CEMB_141E_141C(merged_CEMB_141E, cleaned_141C):
         how="inner",
     )
 
-    write_report(f"Inner merged CEMB + 141E + 141C : " f"{merged_df.shape}")
+    write_report(
+        f"Inner merged CEMB + 141E + 141C : " f"{merged_CEMB_141E_and_141C.shape}"
+    )
 
-    return merged_df
+    merged_CEMB_141E_and_141C.to_csv(
+        "./merged_csvs/merged_CEMB_141E_and_141C.csv", index=False
+    )
+
+    return merged_CEMB_141E_and_141C
 
 
 def main():
