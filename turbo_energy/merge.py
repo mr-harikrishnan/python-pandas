@@ -8,7 +8,10 @@ def main():
     merged_df = pd.merge(
         CEMB_df, oneFourOneE_df, left_on="LGNR", right_on="Serial_CA", how="left"
     )
-    merged_df.to_csv("./merged/merged_data.csv", index=False)
+
+    print(merged_df.columns)
+
+    # merged_df.to_csv("./merged/merged_data.csv", index=False)
 
 
 main()
