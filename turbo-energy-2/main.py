@@ -1,4 +1,5 @@
 import pandas as pd
+from tabulate import tabulate
 
 
 def write_report(text):
@@ -34,6 +35,7 @@ def clean_CEMB(df, status_code, error_code):
     write_report("==================================================")
 
     write_report(f"Before cleaning : {df.shape}")
+    before_row_count = df.shape[0]
 
     df = df[(df["STATUS"] == status_code) & (df["DOK"] == error_code)]
 
@@ -44,6 +46,9 @@ def clean_CEMB(df, status_code, error_code):
     df = df.drop_duplicates(subset="LGNR", keep="first").reset_index(drop=True)
 
     write_report(f"After cleaning  : {df.shape}")
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/CEMB_cleaned.csv", index=False)
 
@@ -59,11 +64,17 @@ def clean_141E(df):
 
     write_report(f"Before cleaning : {df.shape}")
 
+    before_row_count = df.shape[0]
+
     df = df.sort_values(by=["Serial_CA", "DateTime_S5"], ascending=[True, False])
 
     df = df.drop_duplicates(subset="Serial_CA", keep="first").reset_index(drop=True)
 
     write_report(f"After cleaning  : {df.shape}")
+
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/141E_cleaned.csv", index=False)
 
@@ -157,6 +168,8 @@ def clean_141C(df):
 
     write_report(f"Before cleaning : {df.shape}")
 
+    before_row_count = df.shape[0]
+
     df["DateTime_S3"] = pd.to_datetime(df["DateTime_S3"], errors="coerce")
 
     df = df.sort_values(
@@ -168,6 +181,10 @@ def clean_141C(df):
     )
 
     write_report(f"After cleaning  : {df.shape}")
+
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/141C_cleaned.csv", index=False)
 
@@ -269,6 +286,8 @@ def clean_141A(df):
 
     write_report(f"Before cleaning : {df.shape}")
 
+    before_row_count = df.shape[0]
+
     df["DateTime_S1"] = pd.to_datetime(df["DateTime_S1"], errors="coerce")
 
     df = df.sort_values(by=["Unique_ID_S1", "DateTime_S1"], ascending=[True, False])
@@ -276,6 +295,10 @@ def clean_141A(df):
     df = df.drop_duplicates(subset="Unique_ID_S1", keep="first").reset_index(drop=True)
 
     write_report(f"After cleaning  : {df.shape}")
+
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/141A_cleaned.csv", index=False)
 
@@ -376,6 +399,8 @@ def clean_141B(df):
 
     write_report(f"Before cleaning : {df.shape}")
 
+    before_row_count = df.shape[0]
+
     df["DateTime_S2"] = pd.to_datetime(df["DateTime_S2"], errors="coerce")
 
     df = df.sort_values(by=["Unique_ID_S2", "DateTime_S2"], ascending=[True, False])
@@ -383,6 +408,10 @@ def clean_141B(df):
     df = df.drop_duplicates(subset="Unique_ID_S2", keep="first").reset_index(drop=True)
 
     write_report(f"After cleaning  : {df.shape}")
+
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/141B_cleaned.csv", index=False)
 
@@ -485,6 +514,8 @@ def clean_141D(df):
 
     write_report(f"Before cleaning : {df.shape}")
 
+    before_row_count = df.shape[0]
+
     df["DateTime_S4"] = pd.to_datetime(df["DateTime_S4"], errors="coerce")
 
     df = df.sort_values(by=["Unique_ID_S4", "DateTime_S4"], ascending=[True, False])
@@ -492,6 +523,10 @@ def clean_141D(df):
     df = df.drop_duplicates(subset="Unique_ID_S4", keep="first").reset_index(drop=True)
 
     write_report(f"After cleaning  : {df.shape}")
+
+    after_row_count = df.shape[0]
+
+    write_report(f"Removed rows  : {before_row_count-after_row_count}")
 
     df.to_csv("./cleaned_csvs/141D_cleaned.csv", index=False)
 
@@ -682,8 +717,6 @@ def main():
     merged_CEMB_141E_141C_141A_141B_141D = merge_CEMB_141E_141C_141A_141B_141D(
         merged_CEMB_141E_141C_141A_141B, cleaned_141D_df
     )
-
-    print(merged_CEMB_141E_141C_141A_141B_141D.columns)
 
 
 main()
