@@ -16,10 +16,14 @@ def main():
 
     standardDeviation = np.std(df["OEL_TEMPERATUR"])
 
+    print("Std",standardDeviation)
+
+    minValue = df["OEL_TEMPERATUR"].min()
+
+    maxValue = df["OEL_TEMPERATUR"].max()
+
     # xValues = np.arange(-3, 4) * standardDeviation + mean
-    xValues = np.linspace(
-        mean - 4 * standardDeviation, mean + 4 * standardDeviation, 300
-    )
+    xValues = np.linspace(minValue, maxValue, 1000)
 
     yValues = norm.pdf(xValues, loc=mean, scale=standardDeviation)
 
