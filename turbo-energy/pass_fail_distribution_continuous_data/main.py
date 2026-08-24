@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
+import os
 
 
 def get_distribution_values(series):
@@ -38,6 +39,9 @@ def create_distribution_dataframes(df, columns):
 
 
 def plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns):
+
+    outputFolder = "./distribution_plots"
+    os.makedirs(outputFolder, exist_ok=True)
 
     for i in range(0, len(columns), 7):
 
@@ -86,7 +90,15 @@ def plot_distributions(passDistributionDataFrames, failDistributionDataFrames, c
             left=0.08, right=0.97, top=0.95, bottom=0.06, hspace=1.0, wspace=0.25
         )
 
+        figure.savefig(
+            f"{outputFolder}/distribution_{(i // 7) + 1:02d}.png",
+            dpi=300,
+            bbox_inches="tight",
+        )
+
         plt.show()
+
+        plt.close(figure)
 
 
 def find_mean_difference_columns(
