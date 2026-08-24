@@ -86,8 +86,39 @@ def plot_distributions(passDistributionDataFrames, failDistributionDataFrames, c
             left=0.08, right=0.97, top=0.95, bottom=0.06, hspace=1.0, wspace=0.25
         )
 
-
         plt.show()
+
+
+def find_mean_difference_columns(
+    passDistributionDataFrames,
+    failDistributionDataFrames,
+    columns,
+):
+
+    print("\nColumns with whole-number mean difference = 1")
+    print("-" * 80)
+
+    for column in columns:
+
+        passMean = passDistributionDataFrames[column]["mean"]
+        failMean = failDistributionDataFrames[column]["mean"]
+
+        # Convert means to whole numbers
+        passWholeMean = round(passMean)
+        failWholeMean = round(failMean)
+
+        # Calculate difference
+        difference = abs(passWholeMean - failWholeMean)
+
+        # Check if difference is exactly 1
+        if difference == 1:
+
+            print(
+                f"{column} | "
+                f"Pass: {passMean:.6f} -> {passWholeMean} | "
+                f"Fail: {failMean:.6f} -> {failWholeMean} | "
+                f"Difference: {difference}"
+            )
 
 
 def main():
@@ -194,6 +225,12 @@ def main():
     failDistributionDataFrames = create_distribution_dataframes(fail_df, columns)
 
     plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
+
+    find_mean_difference_columns(
+        passDistributionDataFrames,
+        failDistributionDataFrames,
+        columns,
+    )
 
 
 main()
