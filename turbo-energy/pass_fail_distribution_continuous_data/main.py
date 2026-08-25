@@ -5,6 +5,34 @@ from scipy.stats import norm
 import os
 
 
+def write_report(text):
+
+    with open("./report.md", "a") as file:
+        file.write(text + "\n")
+
+
+def find_value_columns(df, columns, value):
+
+    foundColumns = []
+
+    for column in columns:
+
+        if (df[column] == value).any():
+            foundColumns.append(column)
+
+    write_report(f"## {value} Value")
+    write_report("")
+    write_report(f"{value} was found in the following columns:")
+    write_report("")
+
+    for column in foundColumns:
+        write_report(f"- {column}")
+
+    write_report("")
+
+    return foundColumns
+
+
 def get_distribution_values(series):
 
     mean = np.mean(series)
@@ -107,37 +135,51 @@ def find_mean_difference_columns(
     columns,
 ):
 
-    print("\nColumns with whole-number mean difference = 1")
-    print("-" * 80)
+    write_report("## Deviation Analysis")
+    write_report("")
+    write_report("| Column Name | Pass Mean | Fail Mean | Deviation |")
+    write_report("|---|---:|---:|---:|")
 
     for column in columns:
 
         passMean = passDistributionDataFrames[column]["mean"]
         failMean = failDistributionDataFrames[column]["mean"]
 
-        # Convert means to whole numbers
-        passWholeMean = round(passMean)
-        failWholeMean = round(failMean)
+        # Remove decimal values
+        passWholeMean = int(passMean)
+        failWholeMean = int(failMean)
+
+        # Ignore if integer values are the same
+        if passWholeMean == failWholeMean:
+            continue
 
         # Calculate difference
         difference = abs(passWholeMean - failWholeMean)
 
-        # Check if difference is exactly 1
-        if difference == 1:
+        write_report(
+            f"| {column} | {passWholeMean} | " f"{failWholeMean} | {difference} |"
+        )
 
-            print(
-                f"{column} | "
-                f"Pass: {passMean:.6f} -> {passWholeMean} | "
-                f"Fail: {failMean:.6f} -> {failWholeMean} | "
-                f"Difference: {difference}"
-            )
+    write_report("")
 
 
 def main():
 
-    pass_df = pd.read_csv("./pass-01001-0_merged_CEMB_141E_141C_141A_141B_and_141D.csv")
+    passFile = "./pass-datas/pass-01001-0_merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    failFile = "./fail-datas/fail-1011-16_merged_CEMB_141E_141C_141A_141B_and_141D.csv"
 
-    fail_df = pd.read_csv("./fail-1011-16_merged_CEMB_141E_141C_141A_141B_and_141D.csv")
+    pass_df = pd.read_csv(passFile)
+    fail_df = pd.read_csv(failFile)
+
+    # Clear old report
+    with open("./report.md", "w") as file:
+        file.write("# Pass Fail Distribution Report\n\n")
+
+    write_report("## Data Files")
+    write_report("")
+    write_report(f"**Pass Data File Name:** `{os.path.basename(passFile)}`")
+    write_report(f"**Fail Data File Name:** `{os.path.basename(failFile)}`")
+    write_report("")
 
     columns = [
         "MD1_ANLIEF_MG",
@@ -216,32 +258,58 @@ def main():
         "Val_PreTrq_Shaftnut",
     ]
 
-    print("...", len(columns))
+    write_report("## Column Information")
+    write_report("")
+    write_report(f"**Total Column Count:** {len(columns)}")
+    write_report("")
+    write_report("**Columns:**")
+    write_report("")
 
-    pass_df = pass_df[columns].apply(
+    for count, column in enumerate(columns, start=1):
+        write_report(f"{count}. {column}")
+
+    write_report("")
+
+    cleaned_pass_df = pass_df[columns].apply(
         lambda x: x.astype(str)
         .str.strip()
         .str.replace(",", ".", regex=False)
         .astype(float)
     )
 
-    fail_df = fail_df[columns].apply(
+    cleaned_fail_df = fail_df[columns].apply(
         lambda x: x.astype(str)
         .str.strip()
         .str.replace(",", ".", regex=False)
         .astype(float)
     )
 
-    passDistributionDataFrames = create_distribution_dataframes(pass_df, columns)
+    passDistributionDataFrames = create_distribution_dataframes(
+        cleaned_pass_df, columns
+    )
 
-    failDistributionDataFrames = create_distribution_dataframes(fail_df, columns)
+    failDistributionDataFrames = create_distribution_dataframes(
+        cleaned_fail_df, columns
+    )
 
-    plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
+    # plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
 
     find_mean_difference_columns(
         passDistributionDataFrames,
         failDistributionDataFrames,
         columns,
+    )
+
+    find_value_columns(
+        cleaned_pass_df,
+        columns,
+        909090,
+    )
+
+    find_value_columns(
+        cleaned_fail_df,
+        columns,
+        909090,
     )
 
 
