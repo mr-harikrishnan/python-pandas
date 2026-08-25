@@ -292,7 +292,7 @@ def main():
         cleaned_fail_df, columns
     )
 
-    # plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
+    plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
 
     find_mean_difference_columns(
         passDistributionDataFrames,
