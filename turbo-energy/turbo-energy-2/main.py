@@ -652,14 +652,6 @@ def main():
 
     merged_CEMB_141E_141C = merge_CEMB_141E_141C(merged_CEMB_141E_df, cleaned_141C_df)
 
-    # ------------------------------------------------------
-
-    # print(
-    #     oneFourOneA_df[oneFourOneA_df.duplicated(subset=["Unique_ID_S1"], keep=False)][
-    #         "Unique_ID_S1"
-    #     ]
-    # )
-
     # -----------------------CLEAN-141A----------------------
 
     cleaned_141A_df = clean_141A(oneFourOneA_df)
@@ -669,14 +661,6 @@ def main():
     merged_CEMB_141E_141C_141A = merge_CEMB_141E_141C_141A(
         merged_CEMB_141E_141C, cleaned_141A_df
     )
-
-    # ------------------------------------------------------------
-
-    # print(
-    #     oneFourOneB_df[oneFourOneB_df.duplicated(subset=["Unique_ID_S2"], keep=False)][
-    #         "Unique_ID_S2"
-    #     ]
-    # )
 
     # -----------------------CLEAN-141B----------------------
 
@@ -688,8 +672,6 @@ def main():
         merged_CEMB_141E_141C_141A, cleaned_141B_df
     )
 
-    # print(cleaned_141B_df.columns)
-
     # ------------------------MERGE-(MERGED-CEMB-141E-141C-141A) - 141B--
 
     merged_CEMB_141E_141C_141A_141B = merge_CEMB_141E_141C_141A_141B(
@@ -697,12 +679,6 @@ def main():
     )
 
     # ---------------------CLEAN-141D----------------------
-
-    # print(
-    #     oneFourOneD_df[oneFourOneD_df.duplicated(subset=["Unique_ID_S4"], keep=False)][
-    #         "Unique_ID_S4"
-    #     ]
-    # )
 
     cleaned_141D_df = clean_141D(oneFourOneD_df)
 
