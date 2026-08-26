@@ -66,9 +66,13 @@ def create_distribution_dataframes(df, columns):
     return distributionDataFrames
 
 
-def plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns):
+def plot_distributions(
+    passDistributionDataFrames, failDistributionDataFrames, columns, failFile
+):
 
-    outputFolder = "./distribution_plots"
+    failFileName = os.path.splitext(os.path.basename(failFile))[0]
+
+    outputFolder = f"./distribution_plots/{failFileName}"
     os.makedirs(outputFolder, exist_ok=True)
 
     for i in range(0, len(columns), 7):
@@ -118,8 +122,10 @@ def plot_distributions(passDistributionDataFrames, failDistributionDataFrames, c
             left=0.08, right=0.97, top=0.95, bottom=0.06, hspace=1.0, wspace=0.25
         )
 
+        outputFileName = f"distribution_{(i // 7) + 1:02d}.png"
+
         figure.savefig(
-            f"{outputFolder}/distribution_{(i // 7) + 1:02d}.png",
+            os.path.join(outputFolder, outputFileName),
             dpi=300,
             bbox_inches="tight",
         )
@@ -166,7 +172,10 @@ def find_mean_difference_columns(
 def main():
 
     passFile = "./pass-datas/pass-01001-0_merged_CEMB_141E_141C_141A_141B_and_141D.csv"
-    failFile = "./fail-datas/fail-1011-16_merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    failFile = "./fail-datas/status_code-1011-err_code-16-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    # failFile = "./fail-datas/status_code-1002-err_code-513-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    # failFile = "./fail-datas/status_code-1002-err_code-555-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    # failFile = "./fail-datas/status_code-1002-err_code-503-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
 
     pass_df = pd.read_csv(passFile)
     fail_df = pd.read_csv(failFile)
@@ -292,7 +301,9 @@ def main():
         cleaned_fail_df, columns
     )
 
-    plot_distributions(passDistributionDataFrames, failDistributionDataFrames, columns)
+    plot_distributions(
+        passDistributionDataFrames, failDistributionDataFrames, columns, failFile
+    )
 
     find_mean_difference_columns(
         passDistributionDataFrames,
