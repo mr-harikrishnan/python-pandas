@@ -5,13 +5,13 @@ from scipy.stats import norm
 import os
 
 
-def write_report(text):
+def write_report(text, reportFile):
 
-    with open("./report.md", "a") as file:
+    with open(reportFile, "a") as file:
         file.write(text + "\n")
 
 
-def find_value_columns(df, columns, value):
+def find_value_columns(df, columns, value, reportFile):
 
     foundColumns = []
 
@@ -20,15 +20,15 @@ def find_value_columns(df, columns, value):
         if (df[column] == value).any():
             foundColumns.append(column)
 
-    write_report(f"## {value} Value")
-    write_report("")
-    write_report(f"{value} was found in the following columns:")
-    write_report("")
+    write_report(f"## {value} Value", reportFile)
+    write_report("", reportFile)
+    write_report(f"{value} was found in the following columns:", reportFile)
+    write_report("", reportFile)
 
     for column in foundColumns:
-        write_report(f"- {column}")
+        write_report(f"- {column}", reportFile)
 
-    write_report("")
+    write_report("", reportFile)
 
     return foundColumns
 
@@ -136,15 +136,13 @@ def plot_distributions(
 
 
 def find_mean_difference_columns(
-    passDistributionDataFrames,
-    failDistributionDataFrames,
-    columns,
+    passDistributionDataFrames, failDistributionDataFrames, columns, reportFile
 ):
 
-    write_report("## Deviation Analysis")
-    write_report("")
-    write_report("| Column Name | Pass Mean | Fail Mean | Deviation |")
-    write_report("|---|---:|---:|---:|")
+    write_report("## Deviation Analysis", reportFile)
+    write_report("", reportFile)
+    write_report("| Column Name | Pass Mean | Fail Mean | Deviation |", reportFile)
+    write_report("|---|---:|---:|---:|", reportFile)
 
     for column in columns:
 
@@ -163,10 +161,11 @@ def find_mean_difference_columns(
         difference = abs(passWholeMean - failWholeMean)
 
         write_report(
-            f"| {column} | {passWholeMean} | " f"{failWholeMean} | {difference} |"
+            f"| {column} | {passWholeMean} | " f"{failWholeMean} | {difference} |",
+            reportFile,
         )
 
-    write_report("")
+    write_report("", reportFile)
 
 
 def main():
@@ -177,18 +176,24 @@ def main():
     # failFile = "./fail-datas/status_code-1002-err_code-555-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
     # failFile = "./fail-datas/status_code-1002-err_code-503-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
 
+    failFileName = os.path.splitext(os.path.basename(failFile))[0]
+
+    reportFolder = f"./report/{failFileName}"
+    os.makedirs(reportFolder, exist_ok=True)
+    reportFile = f"{reportFolder}/report.md"
+
     pass_df = pd.read_csv(passFile)
     fail_df = pd.read_csv(failFile)
 
     # Clear old report
-    with open("./report.md", "w") as file:
+    with open(reportFile, "w") as file:
         file.write("# Pass Fail Distribution Report\n\n")
 
-    write_report("## Data Files")
-    write_report("")
-    write_report(f"**Pass Data File Name:** `{os.path.basename(passFile)}`")
-    write_report(f"**Fail Data File Name:** `{os.path.basename(failFile)}`")
-    write_report("")
+    write_report("## Data Files", reportFile)
+    write_report("", reportFile)
+    write_report(f"**Pass Data File Name:** `{os.path.basename(passFile)}`", reportFile)
+    write_report(f"**Fail Data File Name:** `{os.path.basename(failFile)}`", reportFile)
+    write_report("", reportFile)
 
     columns = [
         "MD1_ANLIEF_MG",
@@ -267,17 +272,17 @@ def main():
         "Val_PreTrq_Shaftnut",
     ]
 
-    write_report("## Column Information")
-    write_report("")
-    write_report(f"**Total Column Count:** {len(columns)}")
-    write_report("")
-    write_report("**Columns:**")
-    write_report("")
+    write_report("## Column Information", reportFile)
+    write_report("", reportFile)
+    write_report(f"**Total Column Count:** {len(columns)}", reportFile)
+    write_report("", reportFile)
+    write_report("**Columns:**", reportFile)
+    write_report("", reportFile)
 
     for count, column in enumerate(columns, start=1):
-        write_report(f"{count}. {column}")
+        write_report(f"{count}. {column}", reportFile)
 
-    write_report("")
+    write_report("", reportFile)
 
     cleaned_pass_df = pass_df[columns].apply(
         lambda x: x.astype(str)
@@ -306,22 +311,12 @@ def main():
     )
 
     find_mean_difference_columns(
-        passDistributionDataFrames,
-        failDistributionDataFrames,
-        columns,
+        passDistributionDataFrames, failDistributionDataFrames, columns, reportFile
     )
 
-    find_value_columns(
-        cleaned_pass_df,
-        columns,
-        909090,
-    )
+    find_value_columns(cleaned_pass_df, columns, 909090, reportFile)
 
-    find_value_columns(
-        cleaned_fail_df,
-        columns,
-        909090,
-    )
+    find_value_columns(cleaned_fail_df, columns, 909090, reportFile)
 
 
 main()
