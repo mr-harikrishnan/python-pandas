@@ -4,8 +4,8 @@ TURBO ENERGY DATA REPORT
 CEMB CLEANING
 ==================================================
 Before cleaning : (31284, 75)
-After cleaning  : (536, 75)
-Removed rows  : 30748
+After cleaning  : (74, 75)
+Removed rows  : 31210
 
 ==================================================
 141E CLEANING
@@ -17,24 +17,14 @@ Removed rows  : 1456
 ==================================================
 LEFT MERGE - CEMB AND 141E
 ==================================================
-Left merged CEMB and 141E : (536, 113)
-CEMB records not found in 141E : 10
+Left merged CEMB and 141E : (74, 113)
+CEMB records not found in 141E : 0
 First 10 missing LGNR values:
-0020007910431251065004250768400A
-0020007910431251065004261172948B
-0020007910431251065004261173047C
-0020007910431251065004261402391B
-0020007910431251065004261402423B
-0020007910431251065004261402442B
-0020007910431251065004261413919A
-0020007910431251065004261414201B
-0020007910431251065004261414269B
-0020007910431251065202261378073C
 
 ==================================================
 RIGHT MERGE - CEMB AND 141E
 ==================================================
-141E records not found in CEMB : 28559
+141E records not found in CEMB : 29011
 First 10 missing Serial_CA values:
 0020007910431251065004252025981B
 0020007910431251065004252875160B
@@ -50,7 +40,7 @@ First 10 missing Serial_CA values:
 ==================================================
 INNER MERGE - CEMB AND 141E
 ==================================================
-Inner merged data : (526, 113)
+Inner merged data : (74, 113)
 
 ==================================================
 141C CLEANING
@@ -62,14 +52,14 @@ Removed rows  : 1796
 ==================================================
 LEFT MERGE - CEMB + 141E AND 141C
 ==================================================
-Left merged CEMB + 141E and 141C : (526, 138)
+Left merged CEMB + 141E and 141C : (74, 138)
 CEMB + 141E records not found in 141C : 0
 First 10 missing Serial_CA values:
 
 ==================================================
 RIGHT MERGE - CEMB + 141E AND 141C
 ==================================================
-141C records not found in CEMB + 141E : 28615
+141C records not found in CEMB + 141E : 29067
 First 10 missing Serial_Backplate_S3 values:
 0020007910431251065004252025981B
 0020007910431251065004252875160B
@@ -85,7 +75,7 @@ First 10 missing Serial_Backplate_S3 values:
 ==================================================
 INNER MERGE - CEMB + 141E AND 141C
 ==================================================
-Inner merged CEMB + 141E + 141C : (526, 138)
+Inner merged CEMB + 141E + 141C : (74, 138)
 
 ==================================================
 141A CLEANING
@@ -97,14 +87,14 @@ Removed rows  : 1
 ==================================================
 LEFT MERGE - CEMB + 141E + 141C AND 141A
 ==================================================
-Left merged CEMB + 141E + 141C and 141A : (526, 190)
+Left merged CEMB + 141E + 141C and 141A : (74, 190)
 CEMB + 141E + 141C records not found in 141A : 0
 First 10 missing Unique_ID_S3 values:
 
 ==================================================
 RIGHT MERGE - CEMB + 141E + 141C AND 141A
 ==================================================
-141A records not found in CEMB + 141E + 141C : 30720
+141A records not found in CEMB + 141E + 141C : 31172
 First 10 missing Unique_ID_S1 values:
 293123
 293124
@@ -120,7 +110,7 @@ First 10 missing Unique_ID_S1 values:
 ==================================================
 INNER MERGE - CEMB + 141E + 141C AND 141A
 ==================================================
-Inner merged CEMB + 141E + 141C + 141A : (526, 190)
+Inner merged CEMB + 141E + 141C + 141A : (74, 190)
 
 ==================================================
 141B CLEANING
@@ -132,14 +122,14 @@ Removed rows  : 16
 ==================================================
 LEFT MERGE - CEMB + 141E + 141C + 141A AND 141B
 ==================================================
-Left merged CEMB + 141E + 141C + 141A and 141B : (526, 213)
+Left merged CEMB + 141E + 141C + 141A and 141B : (74, 213)
 CEMB + 141E + 141C + 141A records not found in 141B : 0
 First 10 missing Unique_ID_S3 values:
 
 ==================================================
 RIGHT MERGE - CEMB + 141E + 141C + 141A AND 141B
 ==================================================
-141B records not found in CEMB + 141E + 141C + 141A : 30542
+141B records not found in CEMB + 141E + 141C + 141A : 30994
 First 10 missing Unique_ID_S2 values:
 293123.0
 293124.0
@@ -155,7 +145,7 @@ First 10 missing Unique_ID_S2 values:
 ==================================================
 INNER MERGE - CEMB + 141E + 141C + 141A AND 141B
 ==================================================
-Inner merged CEMB + 141E + 141C + 141A + 141B : (526, 213)
+Inner merged CEMB + 141E + 141C + 141A + 141B : (74, 213)
 
 ==================================================
 141D CLEANING
@@ -167,14 +157,14 @@ Removed rows  : 346
 ==================================================
 LEFT MERGE - CEMB + 141E + 141C + 141A + 141B AND 141D
 ==================================================
-Left merged data : (526, 266)
+Left merged data : (74, 266)
 Previous records not found in 141D : 0
 First 10 missing Unique_ID_S3 values:
 
 ==================================================
 RIGHT MERGE - CEMB + 141E + 141C + 141A + 141B AND 141D
 ==================================================
-141D records not found in previous data : 30344
+141D records not found in previous data : 30796
 First 10 missing Unique_ID_S4 values:
 293123
 293124
@@ -190,4 +180,4 @@ First 10 missing Unique_ID_S4 values:
 ==================================================
 INNER MERGE - CEMB + 141E + 141C + 141A + 141B AND 141D
 ==================================================
-Inner merged data : (526, 266)
+Inner merged data : (74, 266)

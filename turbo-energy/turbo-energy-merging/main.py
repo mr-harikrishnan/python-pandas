@@ -154,7 +154,7 @@ def merge_CEMB_141E(cleaned_CEMB, cleaned_141E):
 
     write_report(f"Inner merged data : " f"{merged_df.shape}")
 
-    merged_df.to_csv("./merged_csvs/merged_CEMB_141.csv", index=False)
+    # merged_df.to_csv("./merged_csvs/merged_CEMB_141.csv", index=False)
 
     return merged_df
 
@@ -270,9 +270,9 @@ def merge_CEMB_141E_141C(merged_CEMB_141E, cleaned_141C):
         f"Inner merged CEMB + 141E + 141C : " f"{merged_CEMB_141E_and_141C.shape}"
     )
 
-    merged_CEMB_141E_and_141C.to_csv(
-        "./merged_csvs/merged_CEMB_141E_and_141C.csv", index=False
-    )
+    # merged_CEMB_141E_and_141C.to_csv(
+    #     "./merged_csvs/merged_CEMB_141E_and_141C.csv", index=False
+    # )
 
     return merged_CEMB_141E_and_141C
 
@@ -383,9 +383,9 @@ def merge_CEMB_141E_141C_141A(merged_CEMB_141E_141C, cleaned_141A):
         f"{merged_CEMB_141E_141C_and_141A.shape}"
     )
 
-    merged_CEMB_141E_141C_and_141A.to_csv(
-        "./merged_csvs/merged_CEMB_141E_141C_and_141A.csv", index=False
-    )
+    # merged_CEMB_141E_141C_and_141A.to_csv(
+    #     "./merged_csvs/merged_CEMB_141E_141C_and_141A.csv", index=False
+    # )
 
     return merged_CEMB_141E_141C_and_141A
 
@@ -498,9 +498,9 @@ def merge_CEMB_141E_141C_141A_141B(merged_CEMB_141E_141C_141A, cleaned_141B):
         f"{merged_CEMB_141E_141C_141A_and_141B.shape}"
     )
 
-    merged_CEMB_141E_141C_141A_and_141B.to_csv(
-        "./merged_csvs/merged_CEMB_141E_141C_141A_and_141B.csv", index=False
-    )
+    # merged_CEMB_141E_141C_141A_and_141B.to_csv(
+    #     "./merged_csvs/merged_CEMB_141E_141C_141A_and_141B.csv", index=False
+    # )
 
     return merged_CEMB_141E_141C_141A_and_141B
 
@@ -533,7 +533,7 @@ def clean_141D(df):
     return df
 
 
-def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned_141D):
+def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned_141D,status_code,error_code):
 
     # ---------------LEFT-MERGE---------------
 
@@ -607,7 +607,8 @@ def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned
     )
 
     merged_CEMB_141E_141C_141A_141B_and_141D.to_csv(
-        "./merged_csvs/merged_CEMB_141E_141C_141A_141B_and_141D.csv", index=False
+        f"./merged_csvs/status_code-{status_code}-err_code-{error_code}-merged_CEMB_141E_141C_141A_141B_and_141D.csv",
+        index=False,
     )
 
     return merged_CEMB_141E_141C_141A_141B_and_141D
@@ -636,7 +637,10 @@ def main():
 
     # --------------CLEAN-CEMB-141E------------------
 
-    cleaned_CEMB_df = clean_CEMB(CEMB_df, 1011, 16)
+    status_code = int(input("Enter CEMB STATUS CODE: "))
+    error_code = int(input("Enter CEMB ERROR CODE (DOK): "))
+
+    cleaned_CEMB_df = clean_CEMB(CEMB_df, status_code, error_code)
 
     cleaned_141E_df = clean_141E(oneFourOneE_df)
 
@@ -691,7 +695,7 @@ def main():
     # ----------------------MERGE-(MERGED-CEMB-141E-141C-141A-141B) - 141D----
 
     merged_CEMB_141E_141C_141A_141B_141D = merge_CEMB_141E_141C_141A_141B_141D(
-        merged_CEMB_141E_141C_141A_141B, cleaned_141D_df
+        merged_CEMB_141E_141C_141A_141B, cleaned_141D_df,status_code,error_code
     )
 
 
