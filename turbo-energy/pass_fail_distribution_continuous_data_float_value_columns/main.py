@@ -171,10 +171,10 @@ def find_mean_difference_columns(
 def main():
 
     passFile = "./pass-datas/pass-01001-0_merged_CEMB_141E_141C_141A_141B_and_141D.csv"
-    failFile = "./fail-datas/status_code-1011-err_code-16-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    # failFile = "./fail-datas/status_code-1011-err_code-16-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
     # failFile = "./fail-datas/status_code-1002-err_code-513-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
     # failFile = "./fail-datas/status_code-1002-err_code-555-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
-    # failFile = "./fail-datas/status_code-1002-err_code-503-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
+    failFile = "./fail-datas/status_code-1002-err_code-503-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
 
     failFileName = os.path.splitext(os.path.basename(failFile))[0]
 
