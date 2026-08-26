@@ -718,15 +718,30 @@ def main():
 
     result_df = pd.DataFrame(allStatusCodeAndErrorCodeRowCOunt)
 
-    print(result_df.to_string())
+    result_df = result_df[
+        ~(
+            ((result_df["statusCode"] == 1001) & (result_df["errorCode"] == 0))
+            | ((result_df["statusCode"] == 1010) & (result_df["errorCode"] == 0))
+        )
+    ]
 
-    plt.figure(figsize=(12, 10))
+    result_df = result_df.sort_values("rowCount", ascending=False).reset_index(
+        drop=True
+    )
+
+    result_df["cumulativePercentage"] = (
+        result_df["rowCount"].cumsum() / result_df["rowCount"].sum() * 100
+    )
 
     labels = (
         result_df["statusCode"].astype(str) + " | " + result_df["errorCode"].astype(str)
     )
 
-    bars = plt.bar(labels, result_df["rowCount"])
+    print(result_df["cumulativePercentage"])
+
+    plt.figure(figsize=(12, 10))
+
+    plt.bar(labels, result_df["rowCount"])
 
     for i, value in enumerate(result_df["rowCount"]):
         plt.text(i, value, str(value), ha="center", va="bottom")
@@ -734,12 +749,17 @@ def main():
     plt.xlabel("Status Code - Error Code")
     plt.xticks(rotation=45, ha="right")
     plt.ylabel("Row Count")
+
+    ax2 = plt.gca().twinx()
+    ax2.plot(labels, result_df["cumulativePercentage"], marker="o", color="red")
+    ax2.set_ylabel("Cumulative Percentage (%)")
+    ax2.set_ylim(0, 100)
+    ax2.axhline(y=80, linestyle="--")
+
+    plt.grid(True, axis="both", alpha=0.4)
     plt.title("Row Count by Status Code and Error Code")
-
     plt.tight_layout()
-
     plt.savefig("./status_dok_row_count.png", dpi=300)
-
     plt.show()
 
 
