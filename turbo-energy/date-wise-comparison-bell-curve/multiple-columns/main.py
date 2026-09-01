@@ -49,10 +49,6 @@ def plot_distributions(pass_data, fail_data, columns, inputDate):
 
             column = currentColumns[row]
 
-            # ==========================================================
-            # PASS
-            # ==========================================================
-
             currentPassData = pass_data[column]
 
             pass_xValues, pass_yValues, pass_mean = get_distribution_values(
@@ -69,10 +65,6 @@ def plot_distributions(pass_data, fail_data, columns, inputDate):
 
             axes[row, 0].legend()
             axes[row, 0].grid(True, alpha=0.4)
-
-            # ==========================================================
-            # FAIL
-            # ==========================================================
 
             currentFailData = fail_data[column]
 
@@ -91,32 +83,14 @@ def plot_distributions(pass_data, fail_data, columns, inputDate):
             axes[row, 1].legend()
             axes[row, 1].grid(True, alpha=0.4)
 
-        # ==============================================================
-        # FIGURE LEVEL LABELS
-        # Same as old code
-        # ==============================================================
-
         figure.supxlabel("Parameter Value")
         figure.supylabel("Probability Density")
 
-        # ==============================================================
-        # MAIN TITLE
-        # ==============================================================
-
         figure.suptitle(f"Pass vs Fail Distribution - {inputDate}", fontsize=16)
 
-        # ==============================================================
-        # SPACING
-        # Same alignment as old code
-        # ==============================================================
-
         figure.subplots_adjust(
-            left=0.08, right=0.97, top=0.95, bottom=0.06, hspace=1.0, wspace=0.25
+            left=0.08, right=0.97, top=0.91, bottom=0.06, hspace=1.0, wspace=0.25
         )
-
-        # ==============================================================
-        # SAVE
-        # ==============================================================
 
         figureNumber = (i // maximumColumnsPerFigure) + 1
 
@@ -167,19 +141,13 @@ def main():
 
     date = pd.to_datetime(inputDate).date()
 
-    # ---------------- READ CSV ----------------
-
     pass_df = pd.read_csv(pass_folder_path, parse_dates=["DATUM"])
 
     fail_df = pd.read_csv(fail_folder_path, parse_dates=["DATUM"])
 
-    # ---------------- FILTER DATE ----------------
-
     pass_df = pass_df[pass_df["DATUM"].dt.date == date]
 
     fail_df = fail_df[fail_df["DATUM"].dt.date == date]
-
-    # ---------------- GET COLUMN DATA ----------------
 
     pass_data = {}
     fail_data = {}
@@ -195,12 +163,6 @@ def main():
             f"Pass Count: {len(pass_data[column])}, "
             f"Fail Count: {len(fail_data[column])}"
         )
-
-    print(
-        "=========================================================================================================================="
-    )
-
-    # ---------------- CREATE PLOTS ----------------
 
     plot_distributions(pass_data, fail_data, columns, inputDate)
 
