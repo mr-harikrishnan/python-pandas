@@ -607,7 +607,7 @@ def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned
     )
 
     merged_CEMB_141E_141C_141A_141B_and_141D.to_csv(
-        f"./merged_csvs/status_code-{status_code}-err_code-{error_code}-merged_CEMB_141E_141C_141A_141B_and_141D.csv",
+        f"./merged_csvs/status_code-{status_code}-dok_code-{error_code}-merged_CEMB_141E_141C_141A_141B_and_141D.csv",
         index=False,
     )
 
