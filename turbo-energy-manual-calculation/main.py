@@ -14,6 +14,8 @@ def main(value, prevZ, itration):
     l = 3
 
     # z = lambda_ * value + (1 - lambda_) * prevZ
+
+    print(f" z = {lambda_} x {value} + ( 1 - {lambda_}) x {prevZ}")
     stepone = lambda_ * value
 
     print(f" = {lambda_} x {value} = {stepone}")
@@ -72,7 +74,7 @@ def main(value, prevZ, itration):
 
     stepTwelve = np.sqrt(stepEleven)
 
-    print(f" = √{stepTwelve} = {stepTwelve}")
+    print(f" = √{stepEleven} = {stepTwelve}")
 
     stepThirteeen = std * stepTwelve
 
@@ -126,6 +128,6 @@ def main(value, prevZ, itration):
     )
 
 
-main(2.24, 2.73068492034218, 1)
+main(2.74, 2.7304, 2)
 
 

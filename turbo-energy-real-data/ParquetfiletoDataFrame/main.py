@@ -5,15 +5,15 @@ from scipy.stats import norm
 
 # pip install pandas fastparquet
 
-# df = pd.read_parquet("./final_torque_computed_drifting.parquet")
+df = pd.read_parquet("./final_torque-10-9_5-5.parquet")
 
-# df.to_csv("converted_final_torque_computed_drifting.csv", index=False)
+df.to_csv("final_torque-10-9_5-5.csv", index=False)
 
 
-df = pd.read_csv("./converted_final_torque_computed_drifting.csv")
+# df = pd.read_csv("./converted_final_torque_computed_drifting.csv")
 
-df = df.head(10)
+# df = df.head(10)
 
-df.to_csv("10-drift-dats.csv",index=False)
+# df.to_csv("10-drift-dats.csv",index=False)
 
 
