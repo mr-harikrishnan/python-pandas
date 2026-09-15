@@ -6,7 +6,7 @@ def main(value, prevZ, itration):
     # mean = 1.027
     # std = 0.013
     # lambda_ = 0.02
-    # l = 3
+    # l = 3 
 
     mean = 2.148216
     std = 0.122471
