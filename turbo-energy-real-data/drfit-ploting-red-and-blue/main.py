@@ -7,7 +7,7 @@ from scipy.stats import norm
 
 def main():
 
-    rawDf = pd.read_csv("./manual-cal-oil_pressure.csv")
+    rawDf = pd.read_csv("./manual-cal-oil_pressure-v2.csv")
 
     df = rawDf[["source_timestamp", "activity_value", "mean","drift"]].copy()
 

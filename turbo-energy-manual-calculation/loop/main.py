@@ -4,7 +4,7 @@ import pandas as pd
 # CONFIGURATION
 
 CSV_FILE = "./oil_pressure.csv"
-OUTPUT_FILE = "manual-cal-oil_pressure.csv"
+OUTPUT_FILE = "manual-cal-oil_pressure-v2.csv"
 
 ACTIVITY_COLUMN = "activity_value"
 
