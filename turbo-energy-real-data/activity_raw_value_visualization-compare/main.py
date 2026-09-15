@@ -7,11 +7,11 @@ from scipy.stats import norm
 
 def main():
 
-    rawDf = pd.read_csv("./clickhouse_drift_calculation_computed.csv")
+    rawDf = pd.read_csv("./manual-cal-oil_pressure.csv")
 
     df = rawDf[["source_timestamp", "activity_value", "mean","drift"]].copy()
 
-    mean = 1.027288
+    mean = 4.9272619047619
 
     df["source_timestamp"] = pd.to_datetime(df["source_timestamp"])
 
@@ -25,7 +25,7 @@ def main():
     y = df["activity_value"]
 
     # True = red, False = blue
-    point_colors = df["drift"].map({1: "red", 0: "blue"})
+    point_colors = df["drift"].map({True: "red", False: "blue"})
 
     # Line
     plt.plot(x, y, alpha=0.5)
