@@ -8,10 +8,10 @@ def main(value, prevZ, itration):
     # lambda_ = 0.02
     # l = 3
 
-    mean = 2.6821
-    std = 0.3166
+    mean = 2.148216
+    std = 0.122471
     lambda_ = 0.02
-    l = 3
+    l = 2
 
     # z = lambda_ * value + (1 - lambda_) * prevZ
 
@@ -128,6 +128,6 @@ def main(value, prevZ, itration):
     )
 
 
-main(2.74, 2.7304, 2)
+main(2.22, 2.149814, 10)
 
 
