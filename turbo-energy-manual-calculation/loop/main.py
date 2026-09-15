@@ -40,20 +40,26 @@ results = []
 
 prevZ = mean
 
+sigma_ewma = std * np.sqrt(lambda_value / (2 - lambda_value))
+
+ucl = mean + (l * sigma_ewma)
+
+lcl = mean - (l * sigma_ewma)
+
 for iteration, value in enumerate(activity_values, start=1):
 
     value = float(value)
 
     z_value = lambda_value * value + (1 - lambda_value) * prevZ
 
-    sigma_ewma = std * np.sqrt(
-        (lambda_value / (2 - lambda_value))
-        * (1 - (1 - lambda_value) ** (2 * iteration))
-    )
+    # sigma_ewma = std * np.sqrt(
+    #     (lambda_value / (2 - lambda_value))
+    #     * (1 - (1 - lambda_value) ** (2 * iteration))
+    # )
 
-    ucl = mean + (l * sigma_ewma)
+    # ucl = mean + (l * sigma_ewma)
 
-    lcl = mean - (l * sigma_ewma)
+    # lcl = mean - (l * sigma_ewma)
 
     drift = z_value > ucl or z_value < lcl
 
