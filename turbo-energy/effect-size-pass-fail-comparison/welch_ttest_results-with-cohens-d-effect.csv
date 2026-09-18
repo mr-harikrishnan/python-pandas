@@ -54,7 +54,6 @@ Max_Val_Load_BHsg_W3,Maximum measured value for Load BHsg W3,-1.4497454391036289
 Min_Val_Distance_BHsg_W3,Minimum measured value for Distance BHsg W3,5.2439595331516475,2.2511424035764945e-07,0.05,Rejected,0.22830467133034016,Small
 Max_Val_Distance_BHsg_W3,Maximum measured value for Distance BHsg W3,0.4505953555221965,0.6524607983500081,0.05,Accepted,0.020626892983542904,Very Small
 Val_Temp_CWHeat,Measured CW heat temperature,0.8951237860365221,0.3711148003080862,0.05,Accepted,0.03825234476313358,Very Small
-CW_Pick_Val_Distance_Servo1,CW process value: Pick Val Distance Servo1,-11.428958504700576,3.417347426031242e-27,0.05,Rejected,-0.9727252691146596,Large
 CW_Pick_Val_Distance_Servo2,CW process value: Pick Val Distance Servo2,7.603255207716952,1.29029796916198e-13,0.05,Rejected,0.3959033691180235,Small
 CW_Place_HIM_Val_Distance_Servo2,CW process value: Place HIM Val Distance Servo2,8.443242898289736,2.862572070281018e-16,0.05,Rejected,0.4360549092468587,Small
 CW_Place_TW_Val_Distance_Servo1,CW process value: Place TW Val Distance Servo1,-8.649120554641,5.892677825312435e-17,0.05,Rejected,-0.41439809806544986,Small
