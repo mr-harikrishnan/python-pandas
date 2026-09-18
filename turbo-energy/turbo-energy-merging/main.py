@@ -8,6 +8,36 @@ def write_report(text):
         file.write(text + "\n")
 
 
+def normalize_decimal(value):
+
+    if pd.isna(value):
+        return value
+
+    if isinstance(value, (int, float)):
+        return value
+
+    value = str(value).strip()
+
+    if value == "":
+        return pd.NA
+
+    if "," in value:
+        value = value.replace(",", ".")
+
+    try:
+        return float(value)
+    except ValueError:
+        return value
+
+
+def normalize_all_columns(df):
+
+    for column in df.columns:
+        df[column] = df[column].apply(normalize_decimal)
+
+    return df
+
+
 def rename_duplicate_columns(left_df, right_df):
 
     for column in right_df.columns:
@@ -533,7 +563,9 @@ def clean_141D(df):
     return df
 
 
-def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned_141D,status_code,error_code):
+def merge_CEMB_141E_141C_141A_141B_141D(
+    merged_CEMB_141E_141C_141A_141B, cleaned_141D, status_code, error_code
+):
 
     # ---------------LEFT-MERGE---------------
 
@@ -606,8 +638,12 @@ def merge_CEMB_141E_141C_141A_141B_141D(merged_CEMB_141E_141C_141A_141B, cleaned
         f"Inner merged data : {merged_CEMB_141E_141C_141A_141B_and_141D.shape}"
     )
 
+    merged_CEMB_141E_141C_141A_141B_and_141D = normalize_all_columns(
+        merged_CEMB_141E_141C_141A_141B_and_141D
+    )
+
     merged_CEMB_141E_141C_141A_141B_and_141D.to_csv(
-        f"./merged_csvs/status_code-{status_code}-dok_code-{error_code}-merged_CEMB_141E_141C_141A_141B_and_141D.csv",
+        f"./merged_csvs/IND-value-status_code-{status_code}-dok_code-{error_code}-merged_CEMB_141E_141C_141A_141B_and_141D.csv",
         index=False,
     )
 
@@ -695,7 +731,7 @@ def main():
     # ----------------------MERGE-(MERGED-CEMB-141E-141C-141A-141B) - 141D----
 
     merged_CEMB_141E_141C_141A_141B_141D = merge_CEMB_141E_141C_141A_141B_141D(
-        merged_CEMB_141E_141C_141A_141B, cleaned_141D_df,status_code,error_code
+        merged_CEMB_141E_141C_141A_141B, cleaned_141D_df, status_code, error_code
     )
 
 

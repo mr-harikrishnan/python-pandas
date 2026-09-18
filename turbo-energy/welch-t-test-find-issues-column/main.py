@@ -100,6 +100,7 @@ def main():
         "Max_Val_Load_BHsg_W3",
         "Min_Val_Distance_BHsg_W3",
         "Max_Val_Distance_BHsg_W3",
+        "Val_Temp_CWHeat",
         "CW_Pick_Val_Distance_Servo1",
         "CW_Pick_Val_Distance_Servo2",
         "CW_Place_HIM_Val_Distance_Servo2",
