@@ -1,0 +1,72 @@
+Column,Maeaning,T_Value,P_Value,Alpha,Decision,Cohens_D,Effect_Size
+MD1_DREH,Rotation/torque-related process value,-1.7321143492469289,0.08326451645591197,0.05,Accepted,-0.010591267644695056,Very Small
+MD3_DREH,Rotation/torque-related process value,0.43698081737129985,0.6622967961323857,0.05,Accepted,0.017508789845115776,Very Small
+WUCHTVERS_ANZ,Number of balancing attempts,34.98180877452873,1.2206532286224133e-141,0.05,Rejected,1.488477829790317,Large
+MD1_ANLIEF_MG,Measured process value at input/initial point,-6.200545977999234,1.118162822013518e-09,0.05,Rejected,-0.3103583249883428,Small
+MD1_ANLIEF_G,Measured process value at input/initial point,0.17297652667086366,0.8627340835342244,0.05,Accepted,0.007671631474085787,Very Small
+MD1_AUSLIEF_MG,Measured process value at output/final point,-26.134271141201616,4.493015644382052e-97,0.05,Rejected,-6.754596678297466,Large
+MD1_AUSLIEF_G,Measured process value at output/final point,-0.9950521086690547,0.3201530041317263,0.05,Accepted,-0.04494273994783841,Very Small
+MD2_ANLIEF_MG,Measured process value at input/initial point,-5.50509532452688,5.7157315495548524e-08,0.05,Rejected,-0.2905895116664765,Small
+MD2_ANLIEF_G,Measured process value at input/initial point,-0.08465464754467471,0.9325670536294546,0.05,Accepted,-0.003788819443038323,Very Small
+MD2_AUSLIEF_MG,Measured process value at output/final point,-20.308648162496127,4.1388879380399216e-68,0.05,Rejected,-4.91853037789749,Large
+MD2_AUSLIEF_G,Measured process value at output/final point,-0.17184241361658079,0.8636252868251517,0.05,Accepted,-0.007770994549249738,Very Small
+MD3_ANLIEF_MG,Measured process value at input/initial point,0.7522588595035891,0.45221275216042517,0.05,Accepted,0.02648345831871406,Very Small
+MD3_ANLIEF_G,Measured process value at input/initial point,0.024611234186635546,0.9803740936669698,0.05,Accepted,0.0011399384354803738,Very Small
+MD3_AUSLIEF_MG,Measured process value at output/final point,-0.9944612469142058,0.3204538358620182,0.05,Accepted,-0.10642378388158105,Very Small
+MD3_AUSLIEF_G,Measured process value at output/final point,0.10639325941337584,0.9153097754165022,0.05,Accepted,0.005255474207522213,Very Small
+EB1_ANLIEF_MG,Measured process value at input/initial point,-7.625808513981715,1.0983079487764594e-13,0.05,Rejected,-0.38077601525801863,Small
+EB1_ANLIEF_G,Measured process value at input/initial point,0.570545279754888,0.5685427741843178,0.05,Accepted,0.02498066023537364,Very Small
+EB1_AUSLIEF_MG,Measured process value at output/final point,-21.122622017267208,3.771391158230149e-72,0.05,Rejected,-5.009697690238641,Large
+EB1_AUSLIEF_G,Measured process value at output/final point,1.2966027928557724,0.19531592292052227,0.05,Accepted,0.05678216745249215,Very Small
+EB2_ANLIEF_MG,Measured process value at input/initial point,-7.14943480360744,2.8392457197449466e-12,0.05,Rejected,-0.35481474381035394,Small
+EB2_ANLIEF_G,Measured process value at input/initial point,0.13155438305495507,0.8953851456043292,0.05,Accepted,0.0056000890131269266,Very Small
+EB2_AUSLIEF_MG,Measured process value at output/final point,-21.632551314669414,1.0870207796872048e-74,0.05,Rejected,-4.843157796760252,Large
+EB2_AUSLIEF_G,Measured process value at output/final point,1.0519595484286293,0.29328357459025906,0.05,Accepted,0.0458840725589837,Very Small
+PD1_ANLIEF_1_MV,Measured process value at input/initial point,-71.86551909128359,6.66393855954328e-280,0.05,Rejected,-3.266762770850712,Large
+PD1_ANLIEF_1_G,Measured process value at input/initial point,1.311684812951701,0.19017763460657836,0.05,Accepted,0.05685553139981538,Very Small
+PD1_AUSLIEF_1_MV,Measured process value at output/final point,-115.92733273501898,0.0,0.05,Rejected,-3.4967003222989663,Large
+PD1_AUSLIEF_1_G,Measured process value at output/final point,1.5978283713768204,0.11065919001906745,0.05,Accepted,0.06870167124049362,Very Small
+OEL_DURCHFLUSS,Oil flow rate,11.148500668354107,3.9092217662391775e-26,0.05,Rejected,0.5194531045700832,Medium
+OEL_DRUCK,Oil pressure,-3.114634697929641,0.0019371706788631694,0.05,Rejected,-0.11840535833751513,Very Small
+OEL_TEMPERATUR,Oil temperature,4.455866418465968,1.0107881924812185e-05,0.05,Rejected,0.1611743541940345,Very Small
+PF_SET,Press-fit setpoint,1.471148008713548,0.14182878241569663,0.05,Accepted,0.06628425250877817,Very Small
+PF_TORQUE,Press-fit torque,-3.913425690200538,0.0001025127907767841,0.05,Rejected,-0.17407809467397975,Very Small
+PF_ANGLE,Press-fit angle,5.964318778820441,4.396668354068764e-09,0.05,Rejected,0.23672666405126666,Small
+SPANN_DRUCK,Clamping pressure,0.35821168336458503,0.7203283591184968,0.05,Accepted,0.04659136136562123,Very Small
+Val_Pressure_Bhsg,Measured value for Pressure Bhsg,0.399069721850819,0.6899982178311314,0.05,Accepted,0.01785301329219037,Very Small
+Val_Pressure_CS,Measured value for Pressure CS,0.019448326616673475,0.984490581365799,0.05,Accepted,0.0008731392946461469,Very Small
+Val_Pressure_TS,Measured value for Pressure TS,0.056172125304300956,0.9552252993786289,0.05,Accepted,0.002540835635544302,Very Small
+Val_flow_System,Measured value for flow System,1.9484109123997688,0.051877306729894455,0.05,Accepted,0.08383415700922171,Very Small
+Val_flow_CS,Measured value for flow CS,0.927499329130189,0.35407952332887477,0.05,Accepted,0.043559436315380125,Very Small
+Val_flow_TS,Measured value for flow TS,1.8392668966792287,0.06642003800517571,0.05,Accepted,0.08246214835435978,Very Small
+Val_LVDT_Width_PR1,Measured value for LVDT Width PR1,1.4622370624799106,0.1442501216394834,0.05,Accepted,0.06164806243584559,Very Small
+Val_LVDT_Width_PR2,Measured value for LVDT Width PR2,0.8436200282779288,0.39925075826690243,0.05,Accepted,0.036129629262351096,Very Small
+Min_Val_Load_BHsg_W1,Minimum measured value for Load BHsg W1,0.21462912084278168,0.8301343037071065,0.05,Accepted,0.007107579740685982,Very Small
+Max_Val_Load_BHsg_W1,Maximum measured value for Load BHsg W1,5.7970206190652585,1.1453794257019072e-08,0.05,Rejected,0.2684214936206762,Small
+Min_Val_Distance_BHsg_W1,Minimum measured value for Distance BHsg W1,0.9771364285950346,0.32893284229314657,0.05,Accepted,0.04075532400813742,Very Small
+Max_Val_Distance_BHsg_W1,Maximum measured value for Distance BHsg W1,2.7829711841069886,0.00557347198328687,0.05,Rejected,0.1261972015204609,Very Small
+Min_Val_Load_BHsg_W2,Minimum measured value for Load BHsg W2,4.2672545195776035,2.3305127985525665e-05,0.05,Rejected,0.17166235337118316,Very Small
+Max_Val_Load_BHsg_W2,Maximum measured value for Load BHsg W2,2.3476864986109067,0.01924601898066483,0.05,Rejected,0.10056355260827861,Very Small
+Min_Val_Distance_BHsg_W2,Minimum measured value for Distance BHsg W2,4.181218855940637,3.381986079380204e-05,0.05,Rejected,0.20841841417381463,Small
+Max_Val_Distance_BHsg_W2,Maximum measured value for Distance BHsg W2,1.764029429991159,0.07828443552619367,0.05,Accepted,0.07386514991519166,Very Small
+Min_Val_Load_BHsg_W3,Minimum measured value for Load BHsg W3,-3.9422966719301202,9.116330175780228e-05,0.05,Rejected,-0.1642912728984005,Very Small
+Max_Val_Load_BHsg_W3,Maximum measured value for Load BHsg W3,-1.4497454391036289,0.14770418749535982,0.05,Accepted,-0.06374799769112444,Very Small
+Min_Val_Distance_BHsg_W3,Minimum measured value for Distance BHsg W3,5.2439595331516475,2.2511424035764945e-07,0.05,Rejected,0.22830467133034016,Small
+Max_Val_Distance_BHsg_W3,Maximum measured value for Distance BHsg W3,0.4505953555221965,0.6524607983500081,0.05,Accepted,0.020626892983542904,Very Small
+CW_Pick_Val_Distance_Servo1,CW process value: Pick Val Distance Servo1,-11.428958504700576,3.417347426031242e-27,0.05,Rejected,-0.9727252691146596,Large
+CW_Pick_Val_Distance_Servo2,CW process value: Pick Val Distance Servo2,7.603255207716952,1.29029796916198e-13,0.05,Rejected,0.3959033691180235,Small
+CW_Place_HIM_Val_Distance_Servo2,CW process value: Place HIM Val Distance Servo2,8.443242898289736,2.862572070281018e-16,0.05,Rejected,0.4360549092468587,Small
+CW_Place_TW_Val_Distance_Servo1,CW process value: Place TW Val Distance Servo1,-8.649120554641,5.892677825312435e-17,0.05,Rejected,-0.41439809806544986,Small
+Pick_SN_Val_Distance_Servo1,Process/product value: Pick SN Val Distance Servo1,-0.6781108528427674,0.4979889691268875,0.05,Accepted,-0.029849252069781285,Very Small
+Place_SN_Val_Distance_Servo1,Process/product value: Place SN Val Distance Servo1,-0.3138609444104494,0.7537467294558854,0.05,Accepted,-0.01393378021605646,Very Small
+Min_Val_Load_CW_W1,Minimum measured value for Load CW W1,-0.9805045541667387,0.32728840037030826,0.05,Accepted,-0.2198595861590674,Small
+Max_Val_Load_CW_W1,Maximum measured value for Load CW W1,-0.980511845826845,0.3272848062794514,0.05,Accepted,-0.21986121850986173,Small
+Min_Val_Distance_CW_W1,Minimum measured value for Distance CW W1,-0.9805658775370621,0.32725817461618484,0.05,Accepted,-0.21987332186568254,Small
+Max_Val_Distance_CW_W1,Maximum measured value for Distance CW W1,-0.98050286932456,0.3272892308399698,0.05,Accepted,-0.21985920855993113,Small
+Min_Val_Load_CW_W2,Minimum measured value for Load CW W2,-0.9805117072668029,0.32728487457606703,0.05,Accepted,-0.21986118911635152,Small
+Max_Val_Load_CW_W2,Maximum measured value for Load CW W2,-0.9800397450468004,0.3275175598288643,0.05,Accepted,-0.21975544814254008,Small
+Min_Val_Distance_CW_W2,Minimum measured value for Distance CW W2,-0.9805662356960169,0.32725799808811046,0.05,Accepted,-0.2198734037535325,Small
+Max_Val_Distance_CW_W2,Maximum measured value for Distance CW W2,-0.9805155641306764,0.327282973521291,0.05,Accepted,-0.21986205310413526,Small
+Val_PreTrq_Shaftnut,Measured shaft-nut pre-torque,2.0972624068939534,0.03642699825115907,0.05,Rejected,0.08532267687779348,Very Small
+Val_PreTrqAng_Shaftnut,Measured shaft-nut pre-torque angle,1.207990755457891,0.2275671618829402,0.05,Accepted,0.04500230366158424,Very Small
+Torque_Retry_Count,Number of torque retries,-0.44217992602548,0.6585335761569776,0.05,Accepted,-0.01853977743069885,Very Small

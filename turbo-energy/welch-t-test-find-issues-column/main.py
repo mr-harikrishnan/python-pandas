@@ -18,25 +18,20 @@ def normalize_decimal(value):
     if pd.isna(value):
         return value
 
-    # Already numeric
     if isinstance(value, (int, float)):
         return value
 
     value = str(value).strip()
 
-    # Empty value
     if value == "":
         return pd.NA
 
-    # German decimal separator
     if "," in value:
         value = value.replace(",", ".")
 
-    # Try converting to numeric
     try:
         return float(value)
     except ValueError:
-        # Keep non-numeric values unchanged
         return value
 
 
@@ -105,8 +100,6 @@ def main():
         "Max_Val_Load_BHsg_W3",
         "Min_Val_Distance_BHsg_W3",
         "Max_Val_Distance_BHsg_W3",
-        "Val_Temp_CWHeat",
-        "Val_CWHeat_Cycletime",
         "CW_Pick_Val_Distance_Servo1",
         "CW_Pick_Val_Distance_Servo2",
         "CW_Place_HIM_Val_Distance_Servo2",
@@ -183,7 +176,7 @@ def main():
 
     resultDf = pd.DataFrame(results)
 
-    resultDf.to_csv("./welch_ttest_results-with-cohens-d-value.csv", index=False)
+    resultDf.to_csv("./welch_ttest_results-with-cohens-d-effect.csv", index=False)
 
     print("Results saved to welch_ttest_results.csv")
 
