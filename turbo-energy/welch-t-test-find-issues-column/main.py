@@ -1,5 +1,16 @@
 import pandas as pd
 from scipy.stats import ttest_ind
+import pingouin as pg
+from column_meanings import COLUMN_MEANINGS
+
+
+def get_column_meaning(column):
+
+    for item in COLUMN_MEANINGS:
+        if item["columnName"] == column:
+            return item["meaning"]
+
+    return "Meaning not found"
 
 
 def normalize_decimal(value):
@@ -142,21 +153,37 @@ def main():
         else:
             decision = "Accepted"
 
+        cohensD = pg.compute_effsize(passValues, failValues, eftype="cohen")
+
+        absoluteCohensD = abs(cohensD)
+
+        meaning = get_column_meaning(column)
+
+        if absoluteCohensD < 0.2:
+            effectSize = "Very Small"
+        elif absoluteCohensD < 0.5:
+            effectSize = "Small"
+        elif absoluteCohensD < 0.8:
+            effectSize = "Medium"
+        else:
+            effectSize = "Large"
+
         results.append(
             {
                 "Column": column,
-                "Pass_Count": len(passValues),
-                "Fail_Count": len(failValues),
+                "Maeaning": meaning,
                 "T_Value": tValue,
                 "P_Value": pValue,
                 "Alpha": alpha,
                 "Decision": decision,
+                "Cohens_D": cohensD,
+                "Effect_Size": effectSize,
             }
         )
 
     resultDf = pd.DataFrame(results)
 
-    resultDf.to_csv("./welch_ttest_results.csv", index=False)
+    resultDf.to_csv("./welch_ttest_results-with-cohens-d-value.csv", index=False)
 
     print("Results saved to welch_ttest_results.csv")
 
