@@ -39,7 +39,12 @@ def createDistributionDataFrames(df, columns):
 
 
 def plotDistributions(
-    passDistributionDataFrames, failDistributionDataFrames, columns, fileName
+    passDistributionDataFrames,
+    failDistributionDataFrames,
+    passDf,
+    failDf,
+    columns,
+    fileName,
 ):
 
     fileNameWithoutExtension = os.path.splitext(os.path.basename(fileName))[0]
@@ -48,49 +53,84 @@ def plotDistributions(
 
     os.makedirs(outputFolder, exist_ok=True)
 
-    for i in range(0, len(columns), 7):
+    for i in range(0, len(columns), 4):
 
-        currentColumns = columns[i : i + 7]
+        currentColumns = columns[i : i + 4]
 
         figure, axes = plt.subplots(len(currentColumns), 2, figsize=(16, 32))
 
-        # If there is only one column,
-        # axes will not be 2-dimensional.
         if len(currentColumns) == 1:
             axes = np.array([axes])
 
         for row, column in enumerate(currentColumns):
 
-            # Pass
             passDataFrame = passDistributionDataFrames[column]["data"]
             passMean = passDistributionDataFrames[column]["mean"]
 
-            axes[row, 0].plot(passDataFrame["X"], passDataFrame["Y"], linewidth=2)
-
-            axes[row, 0].axvline(
-                passMean, linestyle="--", linewidth=2, label=f"Mean = {passMean:.2f}"
-            )
-
-            axes[row, 0].set_title(f"{column} - Pass")
-            axes[row, 0].legend()
-            axes[row, 0].grid(True, alpha=0.4)
-
-            # Fail
             failDataFrame = failDistributionDataFrames[column]["data"]
             failMean = failDistributionDataFrames[column]["mean"]
 
-            axes[row, 1].plot(failDataFrame["X"], failDataFrame["Y"], linewidth=2)
+            # Distribution Plot
 
-            axes[row, 1].axvline(
-                failMean, linestyle="--", linewidth=2, label=f"Mean = {failMean:.2f}"
+            axes[row, 0].plot(
+                passDataFrame["X"],
+                passDataFrame["Y"],
+                color="darkgreen",
+                linewidth=2,
+                label="Pass",
             )
 
-            axes[row, 1].set_title(f"{column} - Fail")
+            axes[row, 0].plot(
+                failDataFrame["X"],
+                failDataFrame["Y"],
+                color="red",
+                linewidth=2,
+                label="Fail",
+            )
+
+            axes[row, 0].axvline(
+                passMean, color="darkgreen", linestyle="--", linewidth=2, label="Mean"
+            )
+
+            axes[row, 0].axvline(failMean, color="red", linestyle="--", linewidth=2)
+
+            axes[row, 0].set_title(f"{column} - Distribution")
+
+            axes[row, 0].legend()
+
+            axes[row, 0].grid(True, alpha=0.4)
+
+            # Box Plot
+
+            passValues = pd.to_numeric(passDf[column], errors="coerce").dropna()
+
+            failValues = pd.to_numeric(failDf[column], errors="coerce").dropna()
+
+            axes[row, 1].boxplot([passValues, failValues])
+
+            axes[row, 1].plot(
+                [0.85, 1.15],
+                [passValues.mean(), passValues.mean()],
+                color="blue",
+                linewidth=1,
+                label="Mean",
+            )
+
+            axes[row, 1].plot(
+                [1.85, 2.15],
+                [failValues.mean(), failValues.mean()],
+                color="blue",
+                linewidth=1,
+            )
+
+            axes[row, 1].set_title(f"{column} - Box Plot")
+
             axes[row, 1].legend()
-            axes[row, 1].grid(True, alpha=0.4)
+
+            axes[row, 1].grid(True, axis="y", alpha=0.4)
 
         figure.suptitle(
-            "Pass vs Fail Distribution - Medium and Large Effect Size",
+            "Pass vs Fail Distribution and Box Plot - Medium and Large Effect Size",
             fontsize=13,
         )
 
@@ -115,6 +155,8 @@ def main():
 
     finalCohenDEffectDf = pd.read_csv("./welch_ttest_results-with-cohens-d-effect.csv")
 
+ 
+
     passDf = pd.read_csv(
         "./IND-value-status_code-1001-dok_code-0-merged_CEMB_141E_141C_141A_141B_and_141D.csv"
     )
@@ -128,6 +170,8 @@ def main():
         | (finalCohenDEffectDf["Effect_Size"] == "Large")
     ]["Column"].tolist()
 
+    print(columnsList)
+
     passDf = passDf[columnsList]
     failDf = failDf[columnsList]
 
@@ -138,6 +182,8 @@ def main():
     plotDistributions(
         passDistributionDataFrames,
         failDistributionDataFrames,
+        passDf,
+        failDf,
         columnsList,
         "medium-large-effect",
     )
