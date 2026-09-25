@@ -175,18 +175,21 @@ def main():
     passDf = passDf[columnsList]
     failDf = failDf[columnsList]
 
-    passDistributionDataFrames = createDistributionDataFrames(passDf, columnsList)
+    passDf.to_csv("medium_large_drifted_columns_pass_datas.csv",index=False)
+    failDf.to_csv("medium_large_drifted_columns_fail_datas.csv",index=False)
 
-    failDistributionDataFrames = createDistributionDataFrames(failDf, columnsList)
+    # passDistributionDataFrames = createDistributionDataFrames(passDf, columnsList)
 
-    plotDistributions(
-        passDistributionDataFrames,
-        failDistributionDataFrames,
-        passDf,
-        failDf,
-        columnsList,
-        "medium-large-effect",
-    )
+    # failDistributionDataFrames = createDistributionDataFrames(failDf, columnsList)
+
+    # plotDistributions(
+    #     passDistributionDataFrames,
+    #     failDistributionDataFrames,
+    #     passDf,
+    #     failDf,
+    #     columnsList,
+    #     "medium-large-effect",
+    # )
 
 
 main()
