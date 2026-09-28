@@ -167,9 +167,9 @@ def plot_distributions(
         axes[row, 0].set_title(firstColumn)
         axes[row, 0].legend(
             [
-                f"Mean = {firstMean:.2f}\n"
-                f"SE = {firstStandardError:.2f}\n"
-                f"95% CI = [{firstLowerBound:.2f}, {firstUpperBound:.2f}]"
+                f"Mean = {firstMean:.6f}\n"
+                f"SE = {firstStandardError:.6f}\n"
+                f"95% CI = [{firstLowerBound:.6f}, {firstUpperBound:.6f}]"
             ]
         )
         axes[row, 0].grid(True, alpha=0.4)
@@ -180,9 +180,9 @@ def plot_distributions(
         axes[row, 1].set_title(secondColumn)
         axes[row, 1].legend(
             [
-                f"Mean = {secondMean:.2f}\n"
-                f"SE = {secondStandardError:.2f}\n"
-                f"95% CI = [{secondLowerBound:.2f}, {secondUpperBound:.2f}]"
+                f"Mean = {secondMean:.6f}\n"
+                f"SE = {secondStandardError:.6f}\n"
+                f"95% CI = [{secondLowerBound:.6f}, {secondUpperBound:.6f}]"
             ]
         )
         axes[row, 1].grid(True, alpha=0.4)
@@ -234,45 +234,36 @@ def plot_distributions(
 
     figure.subplots_adjust(top=0.94, bottom=0.06, hspace=0.8)
 
+    plt.savefig("distribution.png", dpi=300, bbox_inches="tight")
+
     plt.show()
 
 
 def plot_correlation(df):
 
-    figure, axes = plt.subplots(len(df.columns) - 1, 1, figsize=(8, 16))
+    correlation = df.corr()
 
-    firstColumn = df.columns[0]
+    figure, axis = plt.subplots(figsize=(8, 6))
 
-    for index in range(1, len(df.columns)):
+    image = axis.imshow(correlation, cmap="coolwarm", vmin=-1, vmax=1)
 
-        secondColumn = df.columns[index]
+    axis.set_xticks(range(len(correlation.columns)))
+    axis.set_xticklabels(correlation.columns, rotation=45, ha="right")
 
-        correlation = df[[firstColumn, secondColumn]].corr()
+    axis.set_yticks(range(len(correlation.columns)))
+    axis.set_yticklabels(correlation.columns)
 
-        row = index - 1
+    for i in range(len(correlation.columns)):
+        for j in range(len(correlation.columns)):
+            axis.text(j, i, f"{correlation.iloc[i, j]:.2f}", ha="center", va="center")
 
-        image = axes[row].imshow(correlation, cmap="coolwarm", vmin=-1, vmax=1)
+    figure.colorbar(image, ax=axis, label="Correlation")
 
-        axes[row].set_xticks([0, 1])
-        axes[row].set_xticklabels([firstColumn, secondColumn], rotation=45, ha="right")
+    axis.set_title("Correlation Heatmap")
 
-        axes[row].set_yticks([0, 1])
-        axes[row].set_yticklabels([firstColumn, secondColumn])
+    plt.tight_layout()
 
-        for i in range(2):
-            for j in range(2):
-
-                axes[row].text(
-                    j, i, f"{correlation.iloc[i, j]:.2f}", ha="center", va="center"
-                )
-
-        axes[row].set_title(f"{firstColumn} vs {secondColumn}")
-
-    figure.colorbar(image, ax=axes, label="Correlation", shrink=0.8)
-
-    figure.suptitle("Correlation Heatmap", fontsize=16)
-
-    figure.subplots_adjust(top=0.94, hspace=0.8)
+    plt.savefig("correlation.png", dpi=300, bbox_inches="tight")
 
     plt.show()
 
@@ -282,6 +273,9 @@ def main():
     df = pd.read_excel(
         "./Minflow Data@202.xlsx", sheet_name="104339022020_202", skiprows=12
     )
+
+    print("Softstop_Offset :")
+    print(df["Softstop_Offset"].to_string())
 
     columnsList = [
         "Softstop_Offset",
@@ -322,6 +316,8 @@ def main():
     plot_distributions(
         df, standardErrors, confidenceIntervals, welchResults, cohensDResults
     )
+
+    plot_correlation(df)
 
 
 main()
